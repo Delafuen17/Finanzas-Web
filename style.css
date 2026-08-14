@@ -76,6 +76,25 @@ section h2 {
     margin-bottom: 0.6rem;
 }
 
+.boton {
+    display: inline-block;
+    margin-top: 0.8rem;
+    padding: 0.55rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--verde);
+    background: rgba(39, 160, 107, 0.12);
+    border: 1px solid rgba(39, 160, 107, 0.3);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.boton:hover {
+    background: var(--verde);
+    color: var(--blanco);
+}
+
 section p {
     color: var(--texto-suave);
     font-size: 0.98rem;
@@ -87,6 +106,144 @@ footer {
     text-align: center;
     padding: 1.2rem;
     font-size: 0.9rem;
+}
+
+footer a {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* ---- Calculadora ---- */
+
+main.calculadora {
+    grid-template-columns: 1fr 1fr;
+}
+
+.formulario label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--texto);
+    margin: 0.9rem 0 0.3rem;
+}
+
+.formulario input {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    font-size: 1rem;
+    border: 1px solid #d5ded9;
+    border-radius: 10px;
+    background: var(--fondo);
+    color: var(--texto);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.formulario input:focus {
+    border-color: var(--verde-claro);
+    box-shadow: 0 0 0 3px rgba(39, 160, 107, 0.15);
+}
+
+.formulario button {
+    width: 100%;
+    margin-top: 1.4rem;
+    padding: 0.85rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--blanco);
+    background: linear-gradient(135deg, var(--verde), var(--verde-claro));
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.formulario button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(27, 107, 74, 0.35);
+}
+
+.resultado-grande {
+    text-align: center;
+    padding: 1rem 0 1.2rem;
+    border-bottom: 1px solid #e3e9e6;
+}
+
+.etiqueta {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+    margin-bottom: 0.2rem;
+}
+
+.cantidad {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--verde);
+    letter-spacing: -0.5px;
+}
+
+.desglose {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    text-align: center;
+    padding: 1.2rem 0;
+}
+
+.desglose .cantidad {
+    font-size: 1.15rem;
+}
+
+.barras {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0.4rem 0 0.8rem;
+}
+
+.barra-fila {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.barra-etiqueta {
+    width: 5.5rem;
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+}
+
+.barra-contenedor {
+    flex: 1;
+    height: 12px;
+    background: #e3e9e6;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.barra {
+    height: 100%;
+    width: 0;
+    background: var(--verde-claro);
+    border-radius: 6px;
+    transition: width 0.4s ease;
+}
+
+.barra-intereses {
+    background: var(--verde);
+}
+
+.nota {
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+    padding-top: 0.8rem;
+    border-top: 1px solid #e3e9e6;
+}
+
+@media (max-width: 700px) {
+    main.calculadora {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 600px) {
