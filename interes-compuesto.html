@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El interés compuesto — Proyecto Finanzas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>El interés compuesto</h1>
+        <p>La fuerza más poderosa del universo, en palabras de Einstein (quizá).</p>
+    </header>
+
+    <main class="articulo">
+
+        <div class="imagen-articulo">
+            <svg viewBox="0 0 800 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Curva de crecimiento exponencial del interés compuesto">
+                <rect width="800" height="260" fill="#eef6f1"/>
+                <line x1="60" y1="220" x2="760" y2="220" stroke="#cfe0d8" stroke-width="3"/>
+                <line x1="60" y1="220" x2="60" y2="30" stroke="#cfe0d8" stroke-width="3"/>
+                <path d="M60 220 C 200 210 300 205 380 180 C 470 150 520 110 560 80 C 600 55 660 40 740 35" stroke="#27a06b" stroke-width="6" fill="none" stroke-linecap="round"/>
+                <circle cx="560" cy="80" r="8" fill="#1b6b4a"/>
+                <text x="576" y="74" font-family="sans-serif" font-size="14" fill="#0f3d2e">crece cada vez más rápido</text>
+                <rect x="80" y="45" width="12" height="175" rx="6" fill="#1b6b4a"/>
+                <text x="100" y="230" font-family="sans-serif" font-size="14" fill="#5c6f66">Tus aportaciones</text>
+                <text x="620" y="230" font-family="sans-serif" font-size="14" fill="#5c6f66">El interés que genera interés</text>
+            </svg>
+        </div>
+
+        <article>
+            <h2>¿Qué es el interés compuesto?</h2>
+            <p>
+                El interés compuesto es el interés que se calcula <strong>sobre el capital inicial más los
+                intereses ya generados</strong>. Es decir: tus intereses también generan intereses. Es la
+                diferencia entre que tu dinero crezca en línea recta (interés simple) o en curva exponencial
+                (interés compuesto).
+            </p>
+            <div class="ejemplo">
+                <strong>Interés simple:</strong> inviertes 1.000 € al 5 % anual → cada año ganas 50 €. En 20 años: 2.000 €.<br>
+                <strong>Interés compuesto:</strong> los 50 € del primer año también ganan interés al año siguiente.
+                En 20 años: <strong>2.653 €</strong> sin aportar nada más. La diferencia es el interés sobre el interés.
+            </div>
+
+            <h2>La fórmula</h2>
+            <p>Para un capital inicial sin aportaciones periódicas:</p>
+            <div class="ejemplo">
+                <strong>Valor final = Capital × (1 + interés) ^ años</strong><br>
+                1.000 € al 5 % durante 20 años → 1.000 × 1,05²⁰ = 2.653 €
+            </div>
+            <p>
+                La variable más importante de la ecuación no es el capital ni el interés: es el <strong>tiempo</strong>.
+                Un punto porcentual más de rentabilidad ayuda, pero empezar diez años antes multiplica el resultado.
+            </p>
+
+            <h2>La regla del 72</h2>
+            <p>
+                Para saber en cuántos años se duplica tu dinero: divide <strong>72 entre el interés anual</strong>.
+            </p>
+            <ul>
+                <li>Al 4 % → 72 / 4 = <strong>18 años</strong> para duplicarse.</li>
+                <li>Al 7 % → 72 / 7 ≈ <strong>10 años</strong>.</li>
+                <li>Al 10 % → 72 / 10 ≈ <strong>7 años</strong>.</li>
+            </ul>
+
+            <h2>Por qué empezar pronto lo cambia todo</h2>
+            <div class="ejemplo">
+                <strong>María empieza a los 25:</strong> 100 €/mes al 7 % durante 10 años (hasta los 35) y luego no aporta más.
+                A los 65 tiene <strong>~125.000 €</strong>.<br>
+                <strong>Luis empieza a los 35:</strong> 100 €/mes al 7 % durante 30 años seguidos.
+                A los 65 tiene <strong>~122.000 €</strong>.<br>
+                María aportó 12.000 € en total; Luis aportó 36.000 €. <strong>El tiempo ganó.</strong>
+            </div>
+            <p>
+                Pruébalo con nuestra <a href="calculadora.html">calculadora de interés compuesto</a> y cambia
+                los años: verás cómo la curva se dispara al final. Ese salto final es el interés compuesto trabajando.
+            </p>
+
+            <h2>Dónde se aplica (y dónde te lo aplican a ti)</h2>
+            <ul>
+                <li><strong>A favor tuyo:</strong> inversiones, fondos indexados, intereses de cuentas remuneradas.</li>
+                <li><strong>En tu contra:</strong> deudas de tarjetas y créditos. Al 20 % de TAE, una deuda de 1.000 € se convierte en 6.000 € en 10 años si solo pagas el mínimo. El interés compuesto no distingue entre ahorrador y deudor.</li>
+            </ul>
+
+            <div class="resumen">
+                <h3>En resumen</h3>
+                <p>
+                    El interés compuesto es <strong>interés sobre interés</strong>: tu dinero genera, y lo
+                    generado también genera. Las tres palancas son <strong>capital, interés y tiempo</strong>,
+                    y el tiempo es la más poderosa. Empieza cuanto antes, aunque sea con poco, y deja que la
+                    curva haga su trabajo.
+                </p>
+            </div>
+        </article>
+
+    </main>
+
+    <footer>
+        <p><a href="aprende.html">← Volver a Aprende</a> · <a href="index.html">Inicio</a> — Educación financiera</p>
+    </footer>
+
+</body>
+</html>
