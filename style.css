@@ -112,6 +112,68 @@ footer a {
     color: rgba(255, 255, 255, 0.75);
 }
 
+/* ---- Sección Aprende ---- */
+
+main.aprende {
+    display: block;
+    max-width: 60rem;
+    margin-top: -1.5rem;
+    padding: 0 1.5rem 3rem;
+    width: 100%;
+}
+
+.dato-curioso {
+    background: linear-gradient(135deg, var(--verde-oscuro), var(--verde));
+    color: var(--blanco);
+    border-radius: var(--radio);
+    padding: 1.6rem 1.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.dato-curioso h2 {
+    color: var(--blanco);
+    margin-bottom: 0.4rem;
+}
+
+.dato-curioso p {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.98rem;
+}
+
+.dato-curioso strong {
+    color: #b8f0d5;
+}
+
+.aprende-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+.tarjeta-tema h3 {
+    font-size: 1.1rem;
+    color: var(--verde);
+    margin-bottom: 0.5rem;
+}
+
+.tarjeta-tema p {
+    color: var(--texto-suave);
+    font-size: 0.95rem;
+}
+
+.punto-clave {
+    margin-top: 0.8rem;
+    padding-top: 0.8rem;
+    border-top: 1px dashed #cfe0d8;
+    font-weight: 600;
+    color: var(--texto) !important;
+    font-size: 0.9rem !important;
+}
+
+.punto-clave a {
+    color: var(--verde);
+}
+
 /* ---- Calculadora ---- */
 
 main.calculadora {
