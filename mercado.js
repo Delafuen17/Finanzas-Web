@@ -13,13 +13,16 @@
     const INTERVALO_REFRESCO = 5 * 60 * 1000; // 5 minutos (respetar el plan gratis)
     const DIAS = 30;
 
+    function claveConfigurada() {
+        return API_KEY && API_KEY !== "CLAVE_TWELVEDATA" && API_KEY.length >= 8;
+    }
+
     const ACTIVOS = [
         { simbolo: "SPX",     nombre: "S&P 500",      tipo: "Índice",       pais: "EE. UU." },
         { simbolo: "IBEX",    nombre: "IBEX 35",      tipo: "Índice",       pais: "España" },
         { simbolo: "NDX",     nombre: "Nasdaq 100",   tipo: "Índice",       pais: "EE. UU." },
-        { simbolo: "DAX",     nombre: "DAX",          tipo: "Índice",       pais: "Alemania" },
-        { simbolo: "BTC/USD", nombre: "Bitcoin",      tipo: "Criptomoneda", pais: "" },
-        { simbolo: "ETH/USD", nombre: "Ethereum",     tipo: "Criptomoneda", pais: "" },
+        { simbolo: "DAX",     nombre: "DAX",          tipo: "Índice",       pais: "Alemania" },        { simbolo: "BTC/USD", nombre: "Bitcoin", tipo: "Criptomoneda", pais: "", cg: "bitcoin" },
+        { simbolo: "ETH/USD", nombre: "Ethereum", tipo: "Criptomoneda", pais: "", cg: "ethereum" },
         { simbolo: "XAU/USD", nombre: "Oro",          tipo: "Materia prima", pais: "" },
         { simbolo: "OILWTI",  nombre: "Petróleo (WTI)", tipo: "Materia prima", pais: "" },
         { simbolo: "EUR/USD", nombre: "Euro / Dólar", tipo: "Divisa",       pais: "" }
@@ -164,6 +167,15 @@
 
     function cargarActivo(activo, silencioso) {
         if (!silencioso) mostrarCargando(activo);
+        // Sin clave configurada: las cripto funcionan igual con CoinGecko (público y sin clave).
+        if (!claveConfigurada()) {
+            if (activo.cg) {
+                cargarCoinGecko(activo);
+            } else {
+                mostrarError(activo, "Para ver " + activo.nombre + " se necesita la clave gratuita de Twelve Data. Añádela como secreto TWELVEDATA_API_KEY en el repo y re-despliega.");
+            }
+            return;
+        }
         fetch(urlDatos(activo))
             .then(function (r) { return r.json(); })
             .then(function (json) {
@@ -172,7 +184,28 @@
                     return;
                 }
                 datosActuales = json;
-                pintarActivo(activo, json);
+                // values vienen del más reciente al más antiguo; la gráfica los quiere al revés.
+                pintarActivo(activo, json.values.slice().reverse());
+            })
+            .catch(function () {
+                mostrarError(activo, "No se ha podido conectar con el proveedor de datos.");
+            });
+    }
+
+    function cargarCoinGecko(activo) {
+        fetch("https://api.coingecko.com/api/v3/coins/" + activo.cg + "/market_chart?vs_currency=eur&days=30&interval=daily")
+            .then(function (r) { return r.json(); })
+            .then(function (json) {
+                if (!json.prices || !json.prices.length) {
+                    mostrarError(activo, "No hay datos para este activo.");
+                    return;
+                }
+                const filas = json.prices.map(function (p) {
+                    const fecha = new Date(p[0]).toISOString().slice(0, 10);
+                    return { datetime: fecha, close: p[1] };
+                });
+                datosActuales = filas;
+                pintarActivo(activo, filas);
             })
             .catch(function () {
                 mostrarError(activo, "No se ha podido conectar con el proveedor de datos.");
@@ -210,9 +243,7 @@
 
     /* ---------- Gráfica SVG ---------- */
 
-    function pintarActivo(activo, json) {
-        // values vienen del más reciente al más antiguo
-        const filas = json.values.slice().reverse();
+    function pintarActivo(activo, filas) {
         const cierres = filas.map(function (f) { return parseFloat(f.close); });
         if (!cierres.length) return;
 
@@ -236,7 +267,7 @@
         const color = sube ? "#27a06b" : "#d64545";
 
         const W = 600;
-        const H = 260;
+        const H = 320;
         const PAD = 14;
         const min = Math.min.apply(null, cierres);
         const max = Math.max.apply(null, cierres);
@@ -284,7 +315,7 @@
         }
     }, INTERVALO_REFRESCO);
 
-    /* ---------- Carga inicial: el primer activo ---------- */
+    /* ---------- Carga inicial: Bitcoin (funciona sin clave) ---------- */
 
-    seleccionarActivo(ACTIVOS[0]);
+    seleccionarActivo(ACTIVOS.find(function (a) { return a.simbolo === "BTC/USD"; }));
 })();

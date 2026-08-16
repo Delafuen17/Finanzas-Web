@@ -662,11 +662,16 @@ main.calculadora .relacionados {
 
 /* ---- Panel de mercados (portada) ---- */
 
+/* La sección de mercados ocupa todo el ancho, como un gran panel bajo las tarjetas */
+main .mercados {
+    grid-column: 1 / -1;
+}
+
 .mercado-panel {
     background: var(--blanco);
     border-radius: var(--radio);
     box-shadow: var(--sombra);
-    padding: 1.4rem;
+    padding: 1.8rem;
     margin-top: 1rem;
 }
 
@@ -679,8 +684,8 @@ main.calculadora .relacionados {
 .mercado-input {
     flex: 1;
     font: inherit;
-    font-size: 1rem;
-    padding: 0.6rem 0.9rem;
+    font-size: 1.05rem;
+    padding: 0.75rem 1rem;
     border: 2px solid #d9e7e0;
     border-radius: 10px;
     background: #fbfdfc;
@@ -771,7 +776,7 @@ main.calculadora .relacionados {
 .mercado-ficha {
     border: 1px solid #e3ece7;
     border-radius: var(--radio);
-    padding: 1rem;
+    padding: 1.4rem;
     background: linear-gradient(180deg, #fbfdfc, #f6faf8);
 }
 
@@ -785,7 +790,7 @@ main.calculadora .relacionados {
 }
 
 .mercado-nombre {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--verde-oscuro);
 }
@@ -800,7 +805,7 @@ main.calculadora .relacionados {
 }
 
 .mercado-precio {
-    font-size: 1.7rem;
+    font-size: 2.3rem;
     font-weight: 800;
     color: var(--verde-oscuro);
     line-height: 1.1;
