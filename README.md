@@ -20,7 +20,7 @@ Todo gratis, sin registro y sin necesidad de saber nada de finanzas para empezar
 | 🧪 **Experimentos** | La máquina del tiempo de la bolsa (con datos reales del S&P 500), el experimento de los gemelos y el reto de las 52 semanas. |
 | 🎬 **Vídeos explicativos** | Explicadores animados de ~1 minuto con narración en español, generados en el propio navegador (Web Speech API). Disponibles en los artículos principales. |
 | 🤖 **Asistente de inversión** | Pregunta lo que quieras sobre finanzas, inversión y bolsa y recibe respuestas educativas (con IA Gemini). *No es un asesor financiero.* |
-| 📈 **Mercados en tiempo real** | Panel con buscador: Bitcoin, Ethereum, Solana, Dogecoin y pares de divisas (euro/dólar…). Gráfica de 30 días que se actualiza sola, con fuentes públicas sin clave (CoinGecko y el BCE). |
+| 📈 **Mercados en tiempo real** | Panel con buscador: Bitcoin, Ethereum, Solana, Dogecoin y pares de divisas (euro/dólar…), más gráficas interactivas del S&P 500 e IBEX 35 (TradingView). Sin claves: fuentes públicas (CoinGecko, BCE y TradingView). |
 | 🎯 **Test y perfil** | ¿Cuánto sabes de finanzas? y ¿qué perfil de inversor eres? Con resultados compartibles. |
 | 📖 **Glosario** | Más de 30 términos financieros explicados sin tecnicismos, con buscador. |
 | 📬 **Newsletter** | Contenido mensual sencillo sobre inversión y finanzas, sin spam (EmailOctopus). |
