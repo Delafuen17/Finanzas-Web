@@ -20,7 +20,7 @@
     <meta name="google-site-verification" content="bId7FrFO8RDR_F640RPJFP61GOo5WOC-G3VNa5ymSi4" />
 
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="style.css?v=16">
+    <link rel="stylesheet" href="style.css?v=17">
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -89,13 +89,12 @@
         <section class="mercados">
             <h2>Mercados en tiempo real</h2>
             <p>
-                Busca un activo —Bitcoin, Ethereum, euro, dólar…—
-                y mira su evolución en los últimos 30 días. La gráfica se
-                actualiza automáticamente. Datos públicos, con fines educativos.
+                Elige un activo —S&P 500, IBEX 35, Bitcoin, oro…—
+                y mira su evolución en tiempo real. La gráfica se
+                actualiza automáticamente. Datos con fines educativos.
             </p>
-            <div id="panel-mercados"></div>
 
-            <h3 class="mercados-subtitulo">Gráfica de mercados (elige el activo)</h3>
+            <h3 class="mercados-subtitulo">Elige el activo</h3>
             <div class="mercados-tv-chips">
                 <button type="button" class="mercado-chip mercado-tv-chip activo" data-symbol="TVC:SPX">S&P 500</button>
                 <button type="button" class="mercado-chip mercado-tv-chip" data-symbol="TVC:IBEX35">IBEX 35</button>
@@ -126,24 +125,47 @@
                 <!-- TradingView Widget END -->
             </div>
             <script type="text/javascript">
+            /* Los chips recrean el widget de TradingView con el nuevo símbolo
+               (el widget se carga como iframe y no expone API de cambio). */
             (function () {
-                var conectar = function () {
-                    var w = window.TradingView && TradingView.widget ? TradingView.widget() : null;
-                    if (!w || !w.chart) return;
-                    var chips = document.querySelectorAll(".mercado-tv-chip");
-                    chips.forEach(function (chip) {
-                        chip.addEventListener("click", function () {
-                            w.chart().setSymbol(chip.getAttribute("data-symbol"));
-                            chips.forEach(function (c) { c.classList.remove("activo"); });
-                            chip.classList.add("activo");
-                        });
-                    });
+                var contenedor = document.querySelector(".mercados-grafica-unica");
+                var chips = document.querySelectorAll(".mercado-tv-chip");
+                if (!contenedor || !chips.length) return;
+
+                var CONFIG = {
+                    autosize: true,
+                    interval: "D",
+                    timezone: "Europe/Madrid",
+                    theme: "light",
+                    style: "1",
+                    locale: "es",
+                    allow_symbol_change: true
                 };
-                if (window.TradingView && TradingView.onready) {
-                    TradingView.onready(conectar);
-                } else {
-                    window.addEventListener("load", conectar);
+
+                function cargarGrafica(simbolo) {
+                    contenedor.innerHTML = "";
+                    var env = document.createElement("div");
+                    env.className = "tradingview-widget-container";
+                    env.innerHTML =
+                        '<div class="tradingview-widget-container__widget"></div>' +
+                        '<div class="tradingview-widget-copyright"><a href="https://es.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Gráfica</span> por TradingView</a></div>';
+                    var s = document.createElement("script");
+                    s.type = "text/javascript";
+                    s.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+                    s.async = true;
+                    var cfg = Object.assign({}, CONFIG, { symbol: simbolo });
+                    s.textContent = JSON.stringify(cfg);
+                    env.appendChild(s);
+                    contenedor.appendChild(env);
                 }
+
+                chips.forEach(function (chip) {
+                    chip.addEventListener("click", function () {
+                        chips.forEach(function (c) { c.classList.remove("activo"); });
+                        chip.classList.add("activo");
+                        cargarGrafica(chip.getAttribute("data-symbol"));
+                    });
+                });
             })();
             </script>
         </section>
@@ -154,7 +176,5 @@
         <p>Proyecto Finanzas · <a href="privacidad.html">Privacidad</a> — Educación financiera</p>
     </footer>
 
-    <script src="mercado.js?v=3"></script>
-
-</body>
+    </body>
 </html>

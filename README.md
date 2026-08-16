@@ -20,7 +20,7 @@ Todo gratis, sin registro y sin necesidad de saber nada de finanzas para empezar
 | 🧪 **Experimentos** | La máquina del tiempo de la bolsa (con datos reales del S&P 500), el experimento de los gemelos y el reto de las 52 semanas. |
 | 🎬 **Vídeos explicativos** | Explicadores animados de ~1 minuto con narración en español, generados en el propio navegador (Web Speech API). Disponibles en los artículos principales. |
 | 🤖 **Asistente de inversión** | Pregunta lo que quieras sobre finanzas, inversión y bolsa y recibe respuestas educativas (con IA Gemini). *No es un asesor financiero.* |
-| 📈 **Mercados en tiempo real** | Panel con buscador: Bitcoin, Ethereum, Solana, Dogecoin y pares de divisas (euro/dólar…), más gráficas interactivas del S&P 500 e IBEX 35 (TradingView). Sin claves: fuentes públicas (CoinGecko, BCE y TradingView). |
+| 📈 **Mercados en tiempo real** | Gráfica interactiva de TradingView (sin claves) con 7 activos seleccionables: S&P 500, IBEX 35, Nasdaq 100, DAX, Euro Stoxx 50, Bitcoin y Oro. |
 | 🎯 **Test y perfil** | ¿Cuánto sabes de finanzas? y ¿qué perfil de inversor eres? Con resultados compartibles. |
 | 📖 **Glosario** | Más de 30 términos financieros explicados sin tecnicismos, con buscador. |
 | 📬 **Newsletter** | Contenido mensual sencillo sobre inversión y finanzas, sin spam (EmailOctopus). |
@@ -47,7 +47,6 @@ Todo gratis, sin registro y sin necesidad de saber nada de finanzas para empezar
 ├── style.css                  # Estilos de toda la web
 ├── compartir.js               # Botones de compartir y copiar citas
 ├── videos.js                  # Motor de vídeos animados con narración
-├── mercado.js                 # Panel de mercados en tiempo real
 ├── favicon.svg / og-image.png # Marca e imagen social
 ├── sitemap.xml / robots.txt   # SEO
 └── .github/workflows/pages.yml# Despliegue automático
@@ -65,8 +64,8 @@ git push
 
 > Nota: el asistente de IA necesita la variable `GEMINI_API_KEY` configurada como secreto
 > en el repositorio (Settings → Secrets and variables → Actions). Sin ella, la web funciona
-> igual, pero el asistente no responde. El panel de mercados no necesita ninguna clave:
-> usa fuentes públicas (CoinGecko y el BCE).
+> igual, pero el asistente no responde. Las gráficas de mercados no necesitan ninguna clave
+> (widgets públicos de TradingView).
 
 ## ⚠️ Aviso
 
