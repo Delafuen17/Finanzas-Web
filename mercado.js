@@ -1,31 +1,24 @@
 /* ============================================================
    mercado.js — Panel de mercados en tiempo real
-   Datos: Twelve Data API (plan gratuito, 800 peticiones/día).
-   La clave se inyecta en el despliegue (GitHub Actions)
-   sustituyendo CLAVE_TWELVEDATA. Sin librerías externas: la
-   gráfica se dibuja con SVG.
+   Fuentes públicas SIN clave (todo funciona desde el navegador):
+   - Criptomonedas: CoinGecko (API pública, precios en euros)
+   - Divisas: Frankfurter (tipos del BCE)
+   Sin librerías externas: la gráfica se dibuja con SVG.
    ============================================================ */
 
 (function () {
     "use strict";
 
-    const API_KEY = "CLAVE_TWELVEDATA"; // se sustituye en el despliegue
-    const INTERVALO_REFRESCO = 5 * 60 * 1000; // 5 minutos (respetar el plan gratis)
-    const DIAS = 30;
-
-    function claveConfigurada() {
-        return API_KEY && API_KEY !== "CLAVE_TWELVEDATA" && API_KEY.length >= 8;
-    }
+    const INTERVALO_REFRESCO = 5 * 60 * 1000; // 5 minutos
 
     const ACTIVOS = [
-        { simbolo: "SPX",     nombre: "S&P 500",      tipo: "Índice",       pais: "EE. UU." },
-        { simbolo: "IBEX",    nombre: "IBEX 35",      tipo: "Índice",       pais: "España" },
-        { simbolo: "NDX",     nombre: "Nasdaq 100",   tipo: "Índice",       pais: "EE. UU." },
-        { simbolo: "DAX",     nombre: "DAX",          tipo: "Índice",       pais: "Alemania" },        { simbolo: "BTC/USD", nombre: "Bitcoin", tipo: "Criptomoneda", pais: "", cg: "bitcoin" },
-        { simbolo: "ETH/USD", nombre: "Ethereum", tipo: "Criptomoneda", pais: "", cg: "ethereum" },
-        { simbolo: "XAU/USD", nombre: "Oro",          tipo: "Materia prima", pais: "" },
-        { simbolo: "OILWTI",  nombre: "Petróleo (WTI)", tipo: "Materia prima", pais: "" },
-        { simbolo: "EUR/USD", nombre: "Euro / Dólar", tipo: "Divisa",       pais: "" }
+        { simbolo: "BTC/EUR", nombre: "Bitcoin",        tipo: "Criptomoneda", cg: "bitcoin" },
+        { simbolo: "ETH/EUR", nombre: "Ethereum",       tipo: "Criptomoneda", cg: "ethereum" },
+        { simbolo: "SOL/EUR", nombre: "Solana",         tipo: "Criptomoneda", cg: "solana" },
+        { simbolo: "DOGE/EUR", nombre: "Dogecoin",      tipo: "Criptomoneda", cg: "dogecoin" },
+        { simbolo: "EUR/USD", nombre: "Euro / Dólar",   tipo: "Divisa", fx: { from: "EUR", to: "USD" } },
+        { simbolo: "EUR/GBP", nombre: "Euro / Libra",   tipo: "Divisa", fx: { from: "EUR", to: "GBP" } },
+        { simbolo: "EUR/JPY", nombre: "Euro / Yen",     tipo: "Divisa", fx: { from: "EUR", to: "JPY" } }
     ];
 
     const panel = document.getElementById("panel-mercados");
@@ -39,7 +32,7 @@
     panel.innerHTML =
         '<div class="mercado-panel">' +
         '  <div class="mercado-buscador">' +
-        '    <input type="search" class="mercado-input" id="mercado-buscar" placeholder="Busca un activo (S&P 500, Bitcoin, oro…)" autocomplete="off" aria-label="Buscar activo">' +
+        '    <input type="search" class="mercado-input" id="mercado-buscar" placeholder="Busca un activo (bitcoin, euro, dólar…)" autocomplete="off" aria-label="Buscar activo">' +
         '    <button type="button" class="mercado-boton" id="mercado-actualizar" title="Actualizar ahora">↻ Actualizar</button>' +
         '  </div>' +
         '  <div class="mercado-resultados" id="mercado-resultados" hidden></div>' +
@@ -58,7 +51,7 @@
         '    <div class="mercado-grafico" id="mercado-grafico"></div>' +
         '    <div class="mercado-pie">' +
         '      <span class="mercado-actualizado" id="mercado-actualizado"></span>' +
-        '      <span class="mercado-aviso">Datos con retraso · uso educativo</span>' +
+        '      <span class="mercado-aviso">Datos públicos · uso educativo</span>' +
         '    </div>' +
         '  </div>' +
         '</div>';
@@ -77,13 +70,8 @@
     /* ---------- Utilidades ---------- */
 
     function formatoPrecio(v) {
-        const decimales = v < 10 ? 4 : v < 1000 ? 2 : 1;
+        const decimales = v >= 10000 ? 0 : v >= 10 ? 2 : 4;
         return new Intl.NumberFormat("es-ES", { minimumFractionDigits: 0, maximumFractionDigits: decimales }).format(v);
-    }
-
-    function formatoCambio(v) {
-        const decimales = v < 10 ? 2 : 2;
-        return new Intl.NumberFormat("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(v);
     }
 
     function escapar(s) {
@@ -146,7 +134,7 @@
 
     /* ---------- Chips rápidos ---------- */
 
-    ["SPX", "IBEX", "BTC/USD", "XAU/USD"].forEach(function (s) {
+    ["BTC/EUR", "ETH/EUR", "EUR/USD"].forEach(function (s) {
         const a = ACTIVOS.find(function (x) { return x.simbolo === s; });
         const chip = document.createElement("button");
         chip.type = "button";
@@ -156,40 +144,17 @@
         chips.appendChild(chip);
     });
 
-    /* ---------- Carga de datos ---------- */
-
-    function urlDatos(activo) {
-        return "https://api.twelvedata.com/time_series" +
-            "?symbol=" + encodeURIComponent(activo.simbolo) +
-            "&interval=1day&outputsize=" + DIAS +
-            "&apikey=" + encodeURIComponent(API_KEY);
-    }
+    /* ---------- Carga de datos (fuentes públicas) ---------- */
 
     function cargarActivo(activo, silencioso) {
         if (!silencioso) mostrarCargando(activo);
-        // Sin clave configurada: las cripto funcionan igual con CoinGecko (público y sin clave).
-        if (!claveConfigurada()) {
-            if (activo.cg) {
-                cargarCoinGecko(activo);
-            } else {
-                mostrarError(activo, "Para ver " + activo.nombre + " se necesita la clave gratuita de Twelve Data. Añádela como secreto TWELVEDATA_API_KEY en el repo y re-despliega.");
-            }
-            return;
+        if (activo.cg) {
+            cargarCoinGecko(activo);
+        } else if (activo.fx) {
+            cargarFrankfurter(activo);
+        } else {
+            mostrarError(activo, "Este activo no está disponible en las fuentes públicas.");
         }
-        fetch(urlDatos(activo))
-            .then(function (r) { return r.json(); })
-            .then(function (json) {
-                if (json.status !== "ok" || !json.values || !json.values.length) {
-                    mostrarError(activo, json.message || "No hay datos para este activo.");
-                    return;
-                }
-                datosActuales = json;
-                // values vienen del más reciente al más antiguo; la gráfica los quiere al revés.
-                pintarActivo(activo, json.values.slice().reverse());
-            })
-            .catch(function () {
-                mostrarError(activo, "No se ha podido conectar con el proveedor de datos.");
-            });
     }
 
     function cargarCoinGecko(activo) {
@@ -203,6 +168,31 @@
                 const filas = json.prices.map(function (p) {
                     const fecha = new Date(p[0]).toISOString().slice(0, 10);
                     return { datetime: fecha, close: p[1] };
+                });
+                datosActuales = filas;
+                pintarActivo(activo, filas);
+            })
+            .catch(function () {
+                mostrarError(activo, "No se ha podido conectar con el proveedor de datos.");
+            });
+    }
+
+    function cargarFrankfurter(activo) {
+        const fin = new Date();
+        const ini = new Date(fin.getTime() - 40 * 24 * 3600 * 1000);
+        const fmt = function (d) { return d.toISOString().slice(0, 10); };
+        const url = "https://api.frankfurter.app/" + fmt(ini) + ".." + fmt(fin) +
+            "?from=" + activo.fx.from + "&to=" + activo.fx.to;
+        fetch(url)
+            .then(function (r) { return r.json(); })
+            .then(function (json) {
+                const rates = json.rates;
+                if (!rates || !Object.keys(rates).length) {
+                    mostrarError(activo, "No hay datos para este par de divisas.");
+                    return;
+                }
+                const filas = Object.keys(rates).sort().map(function (fecha) {
+                    return { datetime: fecha, close: rates[fecha][activo.fx.to] };
                 });
                 datosActuales = filas;
                 pintarActivo(activo, filas);
@@ -256,7 +246,7 @@
         meta.textContent = activo.simbolo + " · " + activo.tipo;
         precio.textContent = formatoPrecio(ultimo);
         precio.className = "mercado-precio " + (diff >= 0 ? "sube" : "baja");
-        cambio.textContent = (diff >= 0 ? "▲ +" : "▼ ") + formatoCambio(diff) + " (" + (pct >= 0 ? "+" : "") + pct.toFixed(2) + " %)";
+        cambio.textContent = (diff >= 0 ? "▲ +" : "▼ ") + formatoPrecio(Math.abs(diff)) + " (" + (pct >= 0 ? "+" : "") + pct.toFixed(2) + " %)";
         cambio.className = "mercado-cambio " + (diff >= 0 ? "sube" : "baja");
 
         const ahora = new Date();
@@ -315,7 +305,7 @@
         }
     }, INTERVALO_REFRESCO);
 
-    /* ---------- Carga inicial: Bitcoin (funciona sin clave) ---------- */
+    /* ---------- Carga inicial: Bitcoin ---------- */
 
-    seleccionarActivo(ACTIVOS.find(function (a) { return a.simbolo === "BTC/USD"; }));
+    seleccionarActivo(ACTIVOS[0]);
 })();
