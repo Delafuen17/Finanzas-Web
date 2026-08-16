@@ -52,6 +52,12 @@ header p {
     margin: 0 auto;
 }
 
+header p.articulo-fecha {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 0.5rem;
+}
+
 main {
     flex: 1;
     max-width: 72rem;
