@@ -24,6 +24,12 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+::selection {
+    background: rgba(39, 160, 107, 0.25);
 }
 
 header {
@@ -331,6 +337,55 @@ main.articulo a {
     color: var(--texto-suave) !important;
 }
 
+/* ---- Newsletter ---- */
+
+section.newsletter {
+    grid-column: 1 / -1;
+}
+
+/* Formulario embebido de EmailOctopus: se limita el ancho y se integra
+   con el diseño de la sección. Los colores del formulario en sí se
+   configuran desde el panel de EmailOctopus (pestaña Style). */
+.emailoctopus-form-wrapper {
+    max-width: 30rem;
+    margin: 1rem auto 0;
+}
+
+.emailoctopus-form input[type="email"] {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    font-size: 1rem;
+    border: 1px solid #d5ded9;
+    border-radius: 10px;
+    background: var(--fondo);
+    color: var(--texto);
+}
+
+.emailoctopus-form button[type="submit"],
+.emailoctopus-form-row-subscribe button {
+    padding: 0.7rem 1.4rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--blanco);
+    background: linear-gradient(135deg, var(--verde), var(--verde-claro));
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.emailoctopus-error-message {
+    color: #b00020;
+    font-size: 0.85rem;
+    margin-top: 0.4rem;
+}
+
+.emailoctopus-success-message {
+    color: var(--verde);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+}
+
 /* ---- Asistente IA ---- */
 
 main.asistente {
@@ -517,6 +572,14 @@ main.asistente {
 
 main.calculadora {
     grid-template-columns: 1fr 1fr;
+    align-items: start;
+}
+
+/* Las secciones de formulario y resultado no deben "saltar" con el hover
+   mientras el usuario escribe. Solo en las tarjetas de la portada. */
+main.calculadora section:hover {
+    transform: none;
+    box-shadow: var(--sombra);
 }
 
 .formulario label {
@@ -563,6 +626,14 @@ main.calculadora {
     box-shadow: 0 6px 18px rgba(27, 107, 74, 0.35);
 }
 
+.formulario button:focus-visible,
+.barra-input button:focus-visible,
+.chip:focus-visible,
+.boton:focus-visible {
+    outline: 3px solid rgba(39, 160, 107, 0.5);
+    outline-offset: 2px;
+}
+
 .resultado-grande {
     text-align: center;
     padding: 1rem 0 1.2rem;
@@ -581,11 +652,13 @@ main.calculadora {
     font-weight: 700;
     color: var(--verde);
     letter-spacing: -0.5px;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
 }
 
 .desglose {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 1rem;
     text-align: center;
     padding: 1.2rem 0;
@@ -634,6 +707,10 @@ main.calculadora {
     background: var(--verde);
 }
 
+.barra-ahorro {
+    background: var(--verde-oscuro);
+}
+
 .nota {
     font-size: 0.8rem;
     color: var(--texto-suave);
@@ -641,9 +718,223 @@ main.calculadora {
     border-top: 1px solid #e3e9e6;
 }
 
+/* ---- Acordeón de herramientas ---- */
+
+.herramientas-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.herramienta {
+    background: var(--blanco);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    overflow: hidden;
+    border: 1px solid transparent;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.herramienta:hover {
+    box-shadow: 0 8px 24px rgba(15, 61, 46, 0.12);
+}
+
+.herramienta.abierta {
+    border-color: rgba(39, 160, 107, 0.4);
+    box-shadow: 0 10px 30px rgba(15, 61, 46, 0.16);
+}
+
+.herramienta-cabecera {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    width: 100%;
+    padding: 1.05rem 1.3rem;
+    font: inherit;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.herramienta-cabecera:hover {
+    background: rgba(39, 160, 107, 0.05);
+}
+
+.herramienta-cabecera:focus-visible {
+    outline: 2px solid var(--verde-claro);
+    outline-offset: -2px;
+}
+
+.herramienta-numero {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--blanco);
+    background: linear-gradient(135deg, var(--verde), var(--verde-claro));
+    border-radius: 10px;
+}
+
+.herramienta-titulo {
+    flex: 1;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--verde);
+    line-height: 1.3;
+    transition: color 0.2s ease;
+}
+
+.herramienta.abierta .herramienta-titulo {
+    color: var(--verde-oscuro);
+}
+
+.herramienta-flecha {
+    flex-shrink: 0;
+    color: var(--verde-claro);
+    font-size: 0.85rem;
+    transition: transform 0.3s ease;
+}
+
+.herramienta.abierta .herramienta-flecha {
+    transform: rotate(180deg);
+}
+
+.herramienta-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+}
+
+.herramienta-contenido {
+    padding: 0 1.3rem 1.2rem 4.2rem;
+    border-top: 1px dashed #cfe0d8;
+}
+
+.herramienta-contenido p {
+    color: var(--texto-suave);
+    font-size: 0.95rem;
+    margin: 0.9rem 0 0;
+}
+
+.herramienta-contenido .boton {
+    margin-top: 0.9rem;
+}
+
+/* ---- Planificador de deudas ---- */
+
+.deuda-fila {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr auto;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.6rem;
+}
+
+.deuda-fila input {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    font-size: 0.9rem;
+    border: 1px solid #d5ded9;
+    border-radius: 8px;
+    background: var(--fondo);
+    color: var(--texto);
+    outline: none;
+}
+
+.deuda-fila input:focus {
+    border-color: var(--verde-claro);
+    box-shadow: 0 0 0 3px rgba(39, 160, 107, 0.15);
+}
+
+.quitar {
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    font-size: 0.9rem;
+    line-height: 1;
+    color: #b00020;
+    background: var(--blanco);
+    border: 1px solid #e3d0d0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.quitar:hover {
+    background: #fdeeee;
+}
+
+.formulario .anadir {
+    width: auto;
+    margin-top: 0;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--verde);
+    background: rgba(39, 160, 107, 0.1);
+    border: 1px solid rgba(39, 160, 107, 0.35);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.formulario .anadir:hover {
+    background: var(--verde);
+    color: var(--blanco);
+}
+
+.formulario select {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.95rem;
+    border: 1px solid #d5ded9;
+    border-radius: 10px;
+    background: var(--fondo);
+    color: var(--texto);
+    outline: none;
+}
+
+.formulario select:focus {
+    border-color: var(--verde-claro);
+    box-shadow: 0 0 0 3px rgba(39, 160, 107, 0.15);
+}
+
+.orden-pago {
+    padding: 0.4rem 0 0.8rem;
+}
+
+.orden-pago ol {
+    margin: 0.4rem 0 0 1.2rem;
+}
+
+.orden-pago li {
+    font-size: 0.92rem;
+    color: var(--texto);
+    margin-bottom: 0.2rem;
+}
+
+.orden-pago li:first-child {
+    font-weight: 700;
+    color: var(--verde);
+}
+
 @media (max-width: 700px) {
     main.calculadora {
         grid-template-columns: 1fr;
+    }
+
+    .deuda-fila {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .deuda-fila .deuda-nombre {
+        grid-column: 1 / -1;
     }
 }
 
@@ -654,5 +945,21 @@ main.calculadora {
 
     header h1 {
         font-size: 2rem;
+    }
+
+    .cantidad {
+        font-size: 1.5rem;
+    }
+
+    main.articulo article {
+        padding: 1.5rem 1.2rem;
+    }
+
+    .herramienta-cabecera {
+        padding: 0.9rem 1rem;
+    }
+
+    .herramienta-contenido {
+        padding: 0 1rem 1rem 3.9rem;
     }
 }

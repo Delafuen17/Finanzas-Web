@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Fondo de Emergencia — Proyecto Finanzas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Fondo de emergencia</h1>
+        <p>Calcula cuánto necesitas guardar para imprevistos y cuánto tiempo tardarás.</p>
+    </header>
+
+    <main class="calculadora">
+
+        <section class="formulario">
+            <h2>Introduce tus datos</h2>
+
+            <label for="gastos">Gastos mensuales (€)</label>
+            <input type="number" id="gastos" min="0" step="any" value="1500" inputmode="decimal">
+
+            <label for="meses">Meses de protección deseada</label>
+            <input type="number" id="meses" min="1" step="1" value="6" inputmode="numeric">
+
+            <label for="ahorro-mensual">Ahorro mensual que puedes destinar (€)</label>
+            <input type="number" id="ahorro-mensual" min="0" step="any" value="200" inputmode="decimal">
+
+            <label for="ya-ahorrado">Ya ahorrado (€)</label>
+            <input type="number" id="ya-ahorrado" min="0" step="any" value="0" inputmode="decimal">
+
+            <button id="calcular" onclick="calcular()">Calcular</button>
+        </section>
+
+        <section class="resultados" id="resultados">
+            <h2>Resultado</h2>
+
+            <div class="resultado-grande">
+                <span class="etiqueta">Objetivo del fondo</span>
+                <span class="cantidad" id="resultado-objetivo">—</span>
+            </div>
+
+            <div class="desglose">
+                <div>
+                    <span class="etiqueta">Te falta por ahorrar</span>
+                    <span class="cantidad" id="resultado-falta">—</span>
+                </div>
+                <div>
+                    <span class="etiqueta">Tiempo estimado</span>
+                    <span class="cantidad" id="resultado-tiempo">—</span>
+                </div>
+            </div>
+
+            <div class="barras">
+                <div class="barra-fila">
+                    <span class="barra-etiqueta">Progreso</span>
+                    <div class="barra-contenedor"><div class="barra" id="barra-progreso"></div></div>
+                </div>
+            </div>
+
+            <p class="nota">La recomendación habitual es guardar entre 3 y 6 meses de gastos en una cuenta aparte (remunerada o fácil de liquidar) antes de empezar a invertir. Ajusta los meses a tu situación laboral y familiar.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p><a href="herramientas.html">← Volver a Herramientas</a> · <a href="privacidad.html">Privacidad</a> — Educación financiera</p>
+    </footer>
+
+    <script>
+        function formato(valor) {
+            return new Intl.NumberFormat("es-ES", {
+                style: "currency",
+                currency: "EUR",
+                maximumFractionDigits: 0
+            }).format(Math.round(valor));
+        }
+
+        function calcular() {
+            const gastos = parseFloat(document.getElementById("gastos").value) || 0;
+            const meses = Math.max(1, parseFloat(document.getElementById("meses").value) || 1);
+            const ahorroMensual = parseFloat(document.getElementById("ahorro-mensual").value) || 0;
+            const yaAhorrado = parseFloat(document.getElementById("ya-ahorrado").value) || 0;
+
+            const objetivo = gastos * meses;
+            const falta = Math.max(0, objetivo - yaAhorrado);
+
+            document.getElementById("resultado-objetivo").textContent = formato(objetivo);
+            document.getElementById("resultado-falta").textContent = formato(falta);
+
+            let tiempo;
+            if (falta <= 0) {
+                tiempo = "¡Ya lo tienes! 🎉";
+            } else if (ahorroMensual <= 0) {
+                tiempo = "Sin ahorro mensual";
+            } else {
+                const mesesNecesarios = Math.ceil(falta / ahorroMensual);
+                tiempo = mesesNecesarios < 12
+                    ? mesesNecesarios + " meses"
+                    : Math.floor(mesesNecesarios / 12) + " años y " + (mesesNecesarios % 12) + " meses";
+            }
+            document.getElementById("resultado-tiempo").textContent = tiempo;
+
+            const progreso = objetivo > 0 ? Math.min(100, (yaAhorrado / objetivo) * 100) : 0;
+            document.getElementById("barra-progreso").style.width = progreso + "%";
+        }
+
+        calcular();
+    </script>
+
+</body>
+</html>

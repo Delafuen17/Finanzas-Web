@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora 50/30/20 — Proyecto Finanzas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Calculadora 50/30/20</h1>
+        <p>Divide tus ingresos netos en necesidades, deseos y ahorro.</p>
+    </header>
+
+    <main class="calculadora">
+
+        <section class="formulario">
+            <h2>Introduce tus datos</h2>
+
+            <label for="ingresos">Ingresos netos mensuales (€)</label>
+            <input type="number" id="ingresos" min="0" step="any" value="2000" inputmode="decimal">
+
+            <button id="calcular" onclick="calcular()">Calcular</button>
+        </section>
+
+        <section class="resultados" id="resultados">
+            <h2>Resultado</h2>
+
+            <div class="resultado-grande">
+                <span class="etiqueta">Presupuesto mensual total</span>
+                <span class="cantidad" id="resultado-total">—</span>
+            </div>
+
+            <div class="desglose">
+                <div>
+                    <span class="etiqueta">50 % · Necesidades</span>
+                    <span class="cantidad" id="resultado-necesidades">—</span>
+                </div>
+                <div>
+                    <span class="etiqueta">30 % · Deseos</span>
+                    <span class="cantidad" id="resultado-deseos">—</span>
+                </div>
+                <div>
+                    <span class="etiqueta">20 % · Ahorro y deudas</span>
+                    <span class="cantidad" id="resultado-ahorro">—</span>
+                </div>
+            </div>
+
+            <div class="barras">
+                <div class="barra-fila">
+                    <span class="barra-etiqueta">Necesidades</span>
+                    <div class="barra-contenedor"><div class="barra" id="barra-necesidades"></div></div>
+                </div>
+                <div class="barra-fila">
+                    <span class="barra-etiqueta">Deseos</span>
+                    <div class="barra-contenedor"><div class="barra barra-intereses" id="barra-deseos"></div></div>
+                </div>
+                <div class="barra-fila">
+                    <span class="barra-etiqueta">Ahorro</span>
+                    <div class="barra-contenedor"><div class="barra barra-ahorro" id="barra-ahorro"></div></div>
+                </div>
+            </div>
+
+            <p class="nota">Regla orientativa de presupuesto: 50 % a necesidades (vivienda, comida, facturas), 30 % a deseos (ocio, caprichos) y 20 % a ahorro y deudas. Ajusta los porcentajes a tu situación.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p><a href="herramientas.html">← Volver a Herramientas</a> · <a href="privacidad.html">Privacidad</a> — Educación financiera</p>
+    </footer>
+
+    <script>
+        function formato(valor) {
+            return new Intl.NumberFormat("es-ES", {
+                style: "currency",
+                currency: "EUR",
+                maximumFractionDigits: 0
+            }).format(Math.round(valor));
+        }
+
+        function calcular() {
+            const ingresos = parseFloat(document.getElementById("ingresos").value) || 0;
+
+            const necesidades = ingresos * 0.50;
+            const deseos = ingresos * 0.30;
+            const ahorro = ingresos * 0.20;
+
+            document.getElementById("resultado-total").textContent = formato(ingresos);
+            document.getElementById("resultado-necesidades").textContent = formato(necesidades);
+            document.getElementById("resultado-deseos").textContent = formato(deseos);
+            document.getElementById("resultado-ahorro").textContent = formato(ahorro);
+
+            document.getElementById("barra-necesidades").style.width = "50%";
+            document.getElementById("barra-deseos").style.width = "30%";
+            document.getElementById("barra-ahorro").style.width = "20%";
+        }
+
+        calcular();
+    </script>
+
+</body>
+</html>

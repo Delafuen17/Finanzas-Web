@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Jubilación — Proyecto Finanzas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Calculadora de jubilación</h1>
+        <p>Cuánto necesitas ahorrar cada mes para llegar a tu objetivo.</p>
+    </header>
+
+    <main class="calculadora">
+
+        <section class="formulario">
+            <h2>Introduce tus datos</h2>
+
+            <label for="objetivo">Objetivo al jubilarte (€)</label>
+            <input type="number" id="objetivo" min="0" step="any" value="500000" inputmode="decimal">
+
+            <label for="anos">Años hasta la jubilación</label>
+            <input type="number" id="anos" min="1" step="any" value="30" inputmode="decimal">
+
+            <label for="rentabilidad">Rentabilidad anual esperada (%)</label>
+            <input type="number" id="rentabilidad" min="0" step="any" value="7" inputmode="decimal">
+
+            <label for="ya-invertido">Ya tienes invertido (€)</label>
+            <input type="number" id="ya-invertido" min="0" step="any" value="0" inputmode="decimal">
+
+            <button id="calcular" onclick="calcular()">Calcular</button>
+        </section>
+
+        <section class="resultados" id="resultados">
+            <h2>Resultado</h2>
+
+            <div class="resultado-grande">
+                <span class="etiqueta">Ahorro mensual necesario</span>
+                <span class="cantidad" id="resultado-mensual">—</span>
+            </div>
+
+            <div class="desglose">
+                <div>
+                    <span class="etiqueta">Total aportado por ti</span>
+                    <span class="cantidad" id="resultado-aportado">—</span>
+                </div>
+                <div>
+                    <span class="etiqueta">Crecimiento del interés compuesto</span>
+                    <span class="cantidad" id="resultado-intereses">—</span>
+                </div>
+            </div>
+
+            <div class="barras">
+                <div class="barra-fila">
+                    <span class="barra-etiqueta">Aportado</span>
+                    <div class="barra-contenedor"><div class="barra" id="barra-aportado"></div></div>
+                </div>
+                <div class="barra-fila">
+                    <span class="barra-etiqueta">Intereses</span>
+                    <div class="barra-contenedor"><div class="barra barra-intereses" id="barra-intereses"></div></div>
+                </div>
+            </div>
+
+            <p class="nota">Estimación orientativa con interés compuesto mensual, sin impuestos ni comisiones. La rentabilidad pasada no garantiza la futura: revisa tu plan cada año.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p><a href="herramientas.html">← Volver a Herramientas</a> · <a href="privacidad.html">Privacidad</a> — Educación financiera</p>
+    </footer>
+
+    <script>
+        function formato(valor) {
+            return new Intl.NumberFormat("es-ES", {
+                style: "currency",
+                currency: "EUR",
+                maximumFractionDigits: 0
+            }).format(Math.round(valor));
+        }
+
+        function calcular() {
+            const objetivo = parseFloat(document.getElementById("objetivo").value) || 0;
+            const anos = Math.max(1, parseFloat(document.getElementById("anos").value) || 1);
+            const rentabilidad = parseFloat(document.getElementById("rentabilidad").value) || 0;
+            const yaInvertido = parseFloat(document.getElementById("ya-invertido").value) || 0;
+
+            const meses = anos * 12;
+            const tasaMensual = rentabilidad / 100 / 12;
+
+            // Valor futuro del capital ya invertido
+            const futuroInvertido = yaInvertido * Math.pow(1 + tasaMensual, meses);
+
+            // Aportación mensual necesaria para cubrir la diferencia
+            let aportacionMensual;
+            if (objetivo <= futuroInvertido) {
+                aportacionMensual = 0;
+            } else if (tasaMensual === 0) {
+                aportacionMensual = (objetivo - futuroInvertido) / meses;
+            } else {
+                // FV = PMT * [((1+r)^n - 1) / r]  →  PMT = FV * r / ((1+r)^n - 1)
+                const factor = (Math.pow(1 + tasaMensual, meses) - 1) / tasaMensual;
+                aportacionMensual = (objetivo - futuroInvertido) / factor;
+            }
+
+            const totalAportado = yaInvertido + aportacionMensual * meses;
+            const intereses = Math.max(0, objetivo - totalAportado);
+
+            document.getElementById("resultado-mensual").textContent = formato(aportacionMensual);
+            document.getElementById("resultado-aportado").textContent = formato(totalAportado);
+            document.getElementById("resultado-intereses").textContent = formato(intereses);
+
+            const anchoAportado = objetivo > 0 ? Math.min(100, (totalAportado / objetivo) * 100) : 0;
+            const anchoIntereses = objetivo > 0 ? Math.min(100, (intereses / objetivo) * 100) : 0;
+            document.getElementById("barra-aportado").style.width = anchoAportado + "%";
+            document.getElementById("barra-intereses").style.width = anchoIntereses + "%";
+        }
+
+        calcular();
+    </script>
+
+</body>
+</html>

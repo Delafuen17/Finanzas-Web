@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planificador de Deudas — Proyecto Finanzas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Planificador de deudas</h1>
+        <p>Añade tus deudas y descubre cuál pagar primero para ahorrar intereses.</p>
+    </header>
+
+    <main class="calculadora">
+
+        <section class="formulario">
+            <h2>Tus deudas</h2>
+
+            <div id="deudas"></div>
+            <button type="button" class="anadir" onclick="anadirDeuda()">+ Añadir deuda</button>
+
+            <label for="pago-mensual">Pago mensual total que puedes destinar (€)</label>
+            <input type="number" id="pago-mensual" min="0" step="any" value="400" inputmode="decimal">
+
+            <label for="metodo">Método de pago</label>
+            <select id="metodo">
+                <option value="avalancha">Avalancha: pagar primero la de mayor interés</option>
+                <option value="nieve">Bola de nieve: pagar primero la de menor saldo</option>
+            </select>
+
+            <button id="calcular" onclick="calcular()">Calcular</button>
+        </section>
+
+        <section class="resultados" id="resultados">
+            <h2>Resultado</h2>
+
+            <div class="resultado-grande">
+                <span class="etiqueta">Tiempo hasta quedar libre de deudas</span>
+                <span class="cantidad" id="resultado-tiempo">—</span>
+            </div>
+
+            <div class="desglose">
+                <div>
+                    <span class="etiqueta">Total intereses pagados</span>
+                    <span class="cantidad" id="resultado-intereses">—</span>
+                </div>
+                <div>
+                    <span class="etiqueta">Total pagado</span>
+                    <span class="cantidad" id="resultado-total">—</span>
+                </div>
+            </div>
+
+            <div class="orden-pago">
+                <span class="etiqueta">Orden de pago recomendado</span>
+                <ol id="resultado-orden"></ol>
+            </div>
+
+            <p class="nota">Estimación orientativa con interés compuesto mensual y pago fijo. El método avalancha minimiza los intereses; la bola de nieve da victorias rápidas que motivan. Elige el que puedas mantener.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p><a href="herramientas.html">← Volver a Herramientas</a> · <a href="privacidad.html">Privacidad</a> — Educación financiera</p>
+    </footer>
+
+    <script>
+        function formato(valor) {
+            return new Intl.NumberFormat("es-ES", {
+                style: "currency",
+                currency: "EUR",
+                maximumFractionDigits: 0
+            }).format(Math.round(valor));
+        }
+
+        function anadirDeuda(nombre, saldo, interes) {
+            const div = document.createElement("div");
+            div.className = "deuda-fila";
+
+            div.innerHTML = `
+                <input type="text" class="deuda-nombre" placeholder="Nombre (ej. Tarjeta)" value="${nombre || ""}">
+                <input type="number" class="deuda-saldo" min="0" step="any" placeholder="Saldo (€)" value="${saldo || ""}" inputmode="decimal">
+                <input type="number" class="deuda-interes" min="0" step="any" placeholder="Interés % anual" value="${interes || ""}" inputmode="decimal">
+                <button type="button" class="quitar" onclick="this.parentElement.remove()" title="Quitar">✕</button>
+            `;
+            document.getElementById("deudas").appendChild(div);
+        }
+
+        function calcular() {
+            const filas = document.querySelectorAll("#deudas .deuda-fila");
+            const deudas = [];
+            filas.forEach(f => {
+                const nombre = f.querySelector(".deuda-nombre").value.trim() || "Deuda";
+                const saldo = parseFloat(f.querySelector(".deuda-saldo").value) || 0;
+                const interes = parseFloat(f.querySelector(".deuda-interes").value) || 0;
+                if (saldo > 0) deudas.push({ nombre, saldo, interes });
+            });
+
+            const pagoMensual = parseFloat(document.getElementById("pago-mensual").value) || 0;
+            const metodo = document.getElementById("metodo").value;
+
+            if (deudas.length === 0 || pagoMensual <= 0) return;
+
+            // Ordenar por método: avalancha (mayor interés) o bola de nieve (menor saldo)
+            deudas.sort((a, b) => metodo === "avalancha"
+                ? b.interes - a.interes
+                : a.saldo - b.saldo);
+
+            const orden = deudas.map(d => d.nombre);
+
+            // Simulación mes a mes: se aplica el interés mensual al saldo
+            // pendiente y se paga primero la deuda prioritaria (sobrante).
+            const saldos = deudas.map(d => d.saldo);
+            let meses = 0;
+            let interesesTotales = 0;
+
+            while (saldos.some(s => s > 0) && meses < 600) {
+                meses++;
+                let sobrante = pagoMensual;
+
+                for (let i = 0; i < deudas.length; i++) {
+                    if (saldos[i] <= 0) continue;
+                    const tasa = deudas[i].interes / 100 / 12;
+                    const devengo = saldos[i] * tasa;
+                    saldos[i] += devengo;
+                    interesesTotales += devengo;
+                }
+
+                for (let i = 0; i < deudas.length; i++) {
+                    if (saldos[i] <= 0) continue;
+                    const pago = Math.min(sobrante, saldos[i]);
+                    saldos[i] -= pago;
+                    sobrante -= pago;
+                }
+            }
+
+            const capitalTotal = deudas.reduce((a, d) => a + d.saldo, 0);
+            const totalPagado = capitalTotal + interesesTotales;
+
+            document.getElementById("resultado-tiempo").textContent =
+                meses >= 600 ? "+ de 50 años" : (meses < 12 ? meses + " meses" : Math.floor(meses / 12) + " años y " + (meses % 12) + " meses");
+            document.getElementById("resultado-intereses").textContent = formato(intereses);
+            document.getElementById("resultado-total").textContent = formato(totalPagado);
+
+            const lista = document.getElementById("resultado-orden");
+            lista.innerHTML = "";
+            orden.forEach((n, i) => {
+                const li = document.createElement("li");
+                li.textContent = n + (i === 0 ? " (primera)" : "");
+                lista.appendChild(li);
+            });
+        }
+
+        anadirDeuda("Tarjeta de crédito", 2000, 22);
+        anadirDeuda("Préstamo personal", 5000, 9);
+        calcular();
+    </script>
+
+</body>
+</html>

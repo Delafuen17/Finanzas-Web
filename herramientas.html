@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herramientas — Proyecto Finanzas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Herramientas</h1>
+        <p>Calculadoras y planificadores para entender mejor tus decisiones financieras. Pulsa cada herramienta para ver qué hace.</p>
+    </header>
+
+    <main class="aprende">
+
+        <div class="herramientas-lista" id="herramientas">
+
+            <div class="herramienta">
+                <button class="herramienta-cabecera" type="button" aria-expanded="false">
+                    <span class="herramienta-numero">1</span>
+                    <span class="herramienta-titulo">Interés compuesto</span>
+                    <span class="herramienta-flecha" aria-hidden="true">▾</span>
+                </button>
+                <div class="herramienta-panel">
+                    <div class="herramienta-contenido">
+                        <p>Descubre cuánto puede crecer tu dinero con aportaciones mensuales y el paso del tiempo.</p>
+                        <a class="boton" href="calculadora.html">Abrir calculadora →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="herramienta">
+                <button class="herramienta-cabecera" type="button" aria-expanded="false">
+                    <span class="herramienta-numero">2</span>
+                    <span class="herramienta-titulo">Regla 50/30/20</span>
+                    <span class="herramienta-flecha" aria-hidden="true">▾</span>
+                </button>
+                <div class="herramienta-panel">
+                    <div class="herramienta-contenido">
+                        <p>Divide tus ingresos netos en tres partes: 50 % necesidades, 30 % deseos y 20 % ahorro y deudas. El punto de partida si nunca has hecho un presupuesto.</p>
+                        <a class="boton" href="calculadora-50-30-20.html">Abrir calculadora →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="herramienta">
+                <button class="herramienta-cabecera" type="button" aria-expanded="false">
+                    <span class="herramienta-numero">3</span>
+                    <span class="herramienta-titulo">Fondo de emergencia</span>
+                    <span class="herramienta-flecha" aria-hidden="true">▾</span>
+                </button>
+                <div class="herramienta-panel">
+                    <div class="herramienta-contenido">
+                        <p>Calcula cuánto necesitas guardar para imprevistos (3-6 meses de gastos) y cuánto tardarás en reunirlo. Tu red de seguridad antes de invertir.</p>
+                        <a class="boton" href="calculadora-fondo-emergencia.html">Abrir calculadora →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="herramienta">
+                <button class="herramienta-cabecera" type="button" aria-expanded="false">
+                    <span class="herramienta-numero">4</span>
+                    <span class="herramienta-titulo">Planificador de deudas</span>
+                    <span class="herramienta-flecha" aria-hidden="true">▾</span>
+                </button>
+                <div class="herramienta-panel">
+                    <div class="herramienta-contenido">
+                        <p>Añade tus deudas y descubre cuál pagar primero (avalancha o bola de nieve) para saldarlas antes y pagar menos intereses.</p>
+                        <a class="boton" href="calculadora-deudas.html">Abrir calculadora →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="herramienta">
+                <button class="herramienta-cabecera" type="button" aria-expanded="false">
+                    <span class="herramienta-numero">5</span>
+                    <span class="herramienta-titulo">Inflación</span>
+                    <span class="herramienta-flecha" aria-hidden="true">▾</span>
+                </button>
+                <div class="herramienta-panel">
+                    <div class="herramienta-contenido">
+                        <p>Mira cuánto poder adquisitivo pierde tu dinero con el paso del tiempo si no genera rentabilidad. El impuesto invisible del dinero parado.</p>
+                        <a class="boton" href="calculadora-inflacion.html">Abrir calculadora →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="herramienta">
+                <button class="herramienta-cabecera" type="button" aria-expanded="false">
+                    <span class="herramienta-numero">6</span>
+                    <span class="herramienta-titulo">Jubilación</span>
+                    <span class="herramienta-flecha" aria-hidden="true">▾</span>
+                </button>
+                <div class="herramienta-panel">
+                    <div class="herramienta-contenido">
+                        <p>Calcula cuánto necesitas ahorrar cada mes para llegar a tu objetivo de jubilación. Cuanto antes empieces, menos cuesta cada mes.</p>
+                        <a class="boton" href="calculadora-jubilacion.html">Abrir calculadora →</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <p><a href="index.html">← Volver a Proyecto Finanzas</a> · <a href="privacidad.html">Privacidad</a> — Educación financiera</p>
+    </footer>
+
+    <script>
+        // Acordeón: solo una herramienta abierta a la vez, con animación suave.
+        const herramientas = document.querySelectorAll("#herramientas .herramienta");
+
+        herramientas.forEach(herramienta => {
+            const cabecera = herramienta.querySelector(".herramienta-cabecera");
+            const panel = herramienta.querySelector(".herramienta-panel");
+
+            cabecera.addEventListener("click", () => {
+                const abierta = herramienta.classList.contains("abierta");
+
+                // Cerrar todas
+                herramientas.forEach(h => {
+                    h.classList.remove("abierta");
+                    h.querySelector(".herramienta-cabecera").setAttribute("aria-expanded", "false");
+                    h.querySelector(".herramienta-panel").style.maxHeight = null;
+                });
+
+                // Abrir la pulsada si no estaba abierta
+                if (!abierta) {
+                    herramienta.classList.add("abierta");
+                    cabecera.setAttribute("aria-expanded", "true");
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
