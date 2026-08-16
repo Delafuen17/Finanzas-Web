@@ -714,14 +714,6 @@ main .mercados {
     margin-top: 0.8rem;
 }
 
-.mercados-grafica-unica .tradingview-widget-container {
-    height: 520px;
-}
-
-.mercados-grafica-unica .tradingview-widget-container__widget {
-    height: 100%;
-}
-
 .mercados-grafica-unica .tradingview-widget-copyright {
     font-size: 0.72rem;
     text-align: right;
