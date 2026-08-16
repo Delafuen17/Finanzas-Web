@@ -125,7 +125,10 @@
     });
 
     fetch("datos/mercados.json")
-        .then(function (r) { return r.json(); })
+        .then(function (r) {
+            if (!r.ok) throw new Error("HTTP " + r.status + " al pedir datos/mercados.json");
+            return r.json();
+        })
         .then(function (json) {
             estado.datos = json;
             var fecha = new Date(json.actualizado);
@@ -139,7 +142,7 @@
             activarChip(estado.clave);
             pintar(estado.clave);
         })
-        .catch(function () {
-            grafico.innerHTML = '<div class="mercados-error">No se han podido cargar los datos de mercado.</div>';
+        .catch(function (e) {
+            grafico.innerHTML = '<div class="mercados-error">No se han podido cargar los datos de mercado: ' + escapar(e && e.message ? e.message : String(e)) + "</div>";
         });
 })();
