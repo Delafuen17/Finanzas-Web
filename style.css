@@ -293,25 +293,28 @@ main.articulo a {
     margin-top: 1.8rem;
 }
 
-.resumen h3 {
+/* Las reglas de main.articulo tienen más especificidad y pintaban el
+   texto de estos cuadros en oscuro sobre el fondo verde; se sube la
+   especificidad para forzar el texto blanco. */
+main.articulo .resumen h3 {
     color: var(--blanco);
     margin-top: 0;
 }
 
-.resumen li,
-.resumen p {
-    color: rgba(255, 255, 255, 0.97);
+main.articulo .resumen p,
+main.articulo .resumen li {
+    color: var(--blanco);
 }
 
-.resumen strong {
+main.articulo .resumen strong {
     color: #d9f5e7;
 }
 
-.resumen a {
+main.articulo .resumen a {
     color: #d9f5e7;
 }
 
-.resumen a:hover {
+main.articulo .resumen a:hover {
     text-decoration: underline;
 }
 
