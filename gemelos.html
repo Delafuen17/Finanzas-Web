@@ -18,8 +18,9 @@
     <link rel="canonical" href="https://delafuen17.github.io/Finanzas-Web/gemelos.html">
 
     <meta name="description" content="El experimento de los gemelos: compara dos personas idénticas que empiezan a invertir a distintas edades y descubre cuánto vale empezar pronto con el interés compuesto.">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">    <link rel="stylesheet" href="style.css?v=4">
+    <script src="compartir.js"></script>
+
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -100,6 +101,15 @@
 
         <div class="gemelos-mensaje" id="mensaje"></div>
 
+        <div class="compartir">
+            <span class="etiqueta">Comparte tu resultado</span>
+            <div class="compartir-botones">
+                <button type="button" class="compartir-btn whatsapp" onclick="compartirWhatsApp()">WhatsApp</button>
+                <button type="button" class="compartir-btn x" onclick="compartirX()">X</button>
+                <button type="button" class="compartir-btn copiar" onclick="copiarResultado()">Copiar</button>
+            </div>
+        </div>
+
         <div class="barras">
             <div class="barra-fila">
                 <span class="barra-etiqueta">Gemelo A</span>
@@ -178,6 +188,8 @@
             }
 
             mensaje.classList.remove("gemelos-alerta");
+
+            definirMensaje(`Empezar a invertir a los ${edadA} = ${formato(finalA)}. A los ${edadB} = ${formato(finalB)}. El interés compuesto premia empezar pronto. Pruébalo:`);
 
             if (edadA === edadB) {
                 mensaje.innerHTML = "Los dos gemelos empiezan a la misma edad: el resultado es idéntico. Prueba a darle <strong>10 años de ventaja</strong> a uno.";

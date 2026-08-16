@@ -18,8 +18,9 @@
     <link rel="canonical" href="https://delafuen17.github.io/Finanzas-Web/calculadora-jubilacion.html">
 
     <meta name="description" content="Calculadora de jubilación: cuánto necesitas ahorrar cada mes para llegar a tu objetivo, teniendo en cuenta el interés compuesto.">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">    <link rel="stylesheet" href="style.css?v=4">
+    <script src="compartir.js"></script>
+
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -89,6 +90,15 @@
                 </div>
             </div>
 
+            <div class="compartir">
+                <span class="etiqueta">Comparte tu resultado</span>
+                <div class="compartir-botones">
+                    <button type="button" class="compartir-btn whatsapp" onclick="compartirWhatsApp()">WhatsApp</button>
+                    <button type="button" class="compartir-btn x" onclick="compartirX()">X</button>
+                    <button type="button" class="compartir-btn copiar" onclick="copiarResultado()">Copiar</button>
+                </div>
+            </div>
+
             <p class="nota">Estimación orientativa con interés compuesto mensual, sin impuestos ni comisiones. La rentabilidad pasada no garantiza la futura: revisa tu plan cada año.</p>
         </section>
 
@@ -137,6 +147,8 @@
             document.getElementById("resultado-mensual").textContent = formato(aportacionMensual);
             document.getElementById("resultado-aportado").textContent = formato(totalAportado);
             document.getElementById("resultado-intereses").textContent = formato(intereses);
+
+            definirMensaje(`Para jubilarme con ${formato(objetivo)} necesito ahorrar ${formato(aportacionMensual)}/mes. Pruébalo:`);
 
             const anchoAportado = objetivo > 0 ? Math.min(100, (totalAportado / objetivo) * 100) : 0;
             const anchoIntereses = objetivo > 0 ? Math.min(100, (intereses / objetivo) * 100) : 0;

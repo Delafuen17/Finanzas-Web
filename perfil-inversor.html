@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué perfil de inversor eres? — Proyecto Finanzas</title>
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Proyecto Finanzas">
+    <meta property="og:title" content="¿Qué perfil de inversor eres? — Proyecto Finanzas">
+    <meta property="og:description" content="Descubre qué tipo de inversor eres con 6 preguntas rápidas y comparte tu resultado: Inversor Paciente, Cauteloso, Equilibrado o Cazador de Riesgo.">
+    <meta property="og:url" content="https://delafuen17.github.io/Finanzas-Web/perfil-inversor.html">
+    <meta property="og:image" content="https://delafuen17.github.io/Finanzas-Web/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="¿Qué perfil de inversor eres? — Proyecto Finanzas">
+    <meta name="twitter:description" content="Descubre qué tipo de inversor eres con 6 preguntas rápidas y comparte tu resultado: Inversor Paciente, Cauteloso, Equilibrado o Cazador de Riesgo.">
+    <meta name="twitter:image" content="https://delafuen17.github.io/Finanzas-Web/og-image.png">
+    <link rel="canonical" href="https://delafuen17.github.io/Finanzas-Web/perfil-inversor.html">
+
+    <meta name="description" content="Descubre qué tipo de inversor eres con 6 preguntas rápidas y comparte tu resultado: Inversor Paciente, Cauteloso, Equilibrado o Cazador de Riesgo.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css?v=4">
+    <script src="compartir.js"></script>
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "¿Qué perfil de inversor eres? — Proyecto Finanzas",
+  "url": "https://delafuen17.github.io/Finanzas-Web/perfil-inversor.html",
+  "description": "Descubre qué tipo de inversor eres con 6 preguntas rápidas y comparte tu resultado.",
+  "inLanguage": "es"
+}
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <h1>¿Qué perfil de inversor eres?</h1>
+        <p>6 preguntas, 30 segundos. Descubre tu forma de relacionarte con el dinero y comparte tu resultado.</p>
+    </header>
+
+    <main class="aprende">
+
+        <section>
+            <p class="quiz-progreso" id="quiz-progreso">Pregunta 1 de 6</p>
+            <div id="quiz-cuerpo"></div>
+            <div class="quiz-resultado" id="quiz-resultado" hidden>
+                <span class="cantidad" id="quiz-emoji">🦉</span>
+                <h3 id="quiz-titulo">El Inversor Paciente</h3>
+                <p id="quiz-descripcion"></p>
+                <div class="compartir">
+                    <span class="etiqueta">Comparte tu resultado</span>
+                    <div class="compartir-botones quiz-botones">
+                        <button type="button" class="compartir-btn whatsapp" onclick="compartirWhatsApp()">WhatsApp</button>
+                        <button type="button" class="compartir-btn x" onclick="compartirX()">X</button>
+                        <button type="button" class="compartir-btn copiar" onclick="copiarResultado()">Copiar</button>
+                    </div>
+                </div>
+                <div class="quiz-botones">
+                    <button type="button" class="boton" onclick="reiniciar()">↺ Repetir el test</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p><a href="herramientas.html">← Volver a Herramientas</a> · <a href="privacidad.html">Privacidad</a> — Educación financiera</p>
+    </footer>
+
+    <script>
+        const PREGUNTAS = [
+            {
+                texto: "Recibes 1.000 € inesperados. ¿Qué haces?",
+                opciones: [
+                    { texto: "Los guardo en una cuenta sin riesgo", puntos: 1 },
+                    { texto: "Pago deuda y pongo la mitad en un fondo indexado", puntos: 2 },
+                    { texto: "Los meto en la cripto o acción de moda", puntos: 3 }
+                ]
+            },
+            {
+                texto: "Tu inversión cae un 25 % en un mes. ¿Qué sientes?",
+                opciones: [
+                    { texto: "Pánico: vendo para no perder más", puntos: 3 },
+                    { texto: "Incomodidad, pero no toco nada: esto pasa", puntos: 2 },
+                    { texto: "Indiferencia: mi horizonte es de décadas", puntos: 1 }
+                ]
+            },
+            {
+                texto: "¿Qué prefieres?",
+                opciones: [
+                    { texto: "Ganar poco pero no perder nunca", puntos: 1 },
+                    { texto: "Crecimiento lento y estable a largo plazo", puntos: 2 },
+                    { texto: "Posibilidad de multiplicar rápido, asumiendo riesgo", puntos: 3 }
+                ]
+            },
+            {
+                texto: "¿Cuánto tiempo piensas mantener tu dinero invertido?",
+                opciones: [
+                    { texto: "Menos de 1 año", puntos: 3 },
+                    { texto: "De 1 a 5 años", puntos: 2 },
+                    { texto: "Más de 10 años", puntos: 1 }
+                ]
+            },
+            {
+                texto: "Un amigo te cuenta que ha duplicado su dinero en 3 meses. ¿Qué piensas?",
+                opciones: [
+                    { texto: "Quiero hacer lo mismo cuanto antes", puntos: 3 },
+                    { texto: "Me alegro, pero prefiero mi plan tranquilo", puntos: 2 },
+                    { texto: "Sospecho: eso suele acabar mal", puntos: 1 }
+                ]
+            },
+            {
+                texto: "¿Qué papel tiene el interés compuesto en tu vida?",
+                opciones: [
+                    { texto: "Nunca había oído hablar de él", puntos: 3 },
+                    { texto: "Lo entiendo, pero aún no lo aprovecho", puntos: 2 },
+                    { texto: "Es el motor de todo mi plan financiero", puntos: 1 }
+                ]
+            }
+        ];
+
+        const PERFILES = [
+            {
+                min: 6, max: 9,
+                emoji: "🐢",
+                nombre: "El Ahorrador Cauteloso",
+                descripcion: "Tu prioridad es no perder dinero, y eso tiene mucho valor: deuda cero y tranquilidad. Tu único riesgo es la inflación: el dinero muy seguro que no rinde pierde poder adquisitivo cada año. Tu primer paso: una cuenta remunerada o depósito, y luego un fondo indexado con aportaciones pequeñas.",
+                mensaje: "Mi perfil de inversor es el 🐢 Ahorrador Cauteloso: prefiero no perder a ganar rápido. ¿Y tú?"
+            },
+            {
+                min: 10, max: 13,
+                emoji: "🦉",
+                nombre: "El Inversor Paciente",
+                descripcion: "El perfil más rentable a largo plazo: entiendes que la bolsa sube y baja, y que el tiempo y la regularidad ganan a la emoción. Tu plan: fondos indexados baratos, aportación mensual automática y no mirar la cartera cada día. No cambies nada: funciona.",
+                mensaje: "Mi perfil de inversor es el 🦉 Inversor Paciente: tiempo en el mercado, no timing. ¿Y tú?"
+            },
+            {
+                min: 14, max: 16,
+                emoji: "🦅",
+                nombre: "El Inversor Equilibrado",
+                descripcion: "Te gusta el crecimiento pero sin dormir mal. Tu punto dulce está en una cartera mixta: una base amplia de fondos indexados y un pequeño porcentaje en renta variable temática. Cuidado con un error típico: aumentar el riesgo justo cuando el mercado sube.",
+                mensaje: "Mi perfil de inversor es el 🦅 Equilibrado: crecer sin perder el sueño. ¿Y tú?"
+            },
+            {
+                min: 17, max: 18,
+                emoji: "🐺",
+                nombre: "El Cazador de Riesgo",
+                descripcion: "Te atrae lo que sube rápido, y eso es una energía valiosa... y peligrosa. El patrón clásico: comprar caro cuando todos hablan y vender barato en pánico. No dejes de arriesgar, pero hazlo con una base sólida primero (fondo de emergencia + indexado) y solo con dinero que puedas perder.",
+                mensaje: "Mi perfil de inversor es el 🐺 Cazador de Riesgo. ¿Te atreves a hacer el test?"
+            }
+        ];
+
+        let actual = 0;
+        let puntos = 0;
+
+        function pintarPregunta() {
+            const p = PREGUNTAS[actual];
+            document.getElementById("quiz-progreso").textContent = `Pregunta ${actual + 1} de ${PREGUNTAS.length}`;
+            const cuerpo = document.getElementById("quiz-cuerpo");
+            cuerpo.innerHTML = `<div class="quiz-pregunta"><h3>${p.texto}</h3></div>`;
+            const contenedor = cuerpo.querySelector(".quiz-pregunta");
+            p.opciones.forEach((opcion, i) => {
+                const boton = document.createElement("button");
+                boton.type = "button";
+                boton.className = "quiz-opcion";
+                boton.textContent = opcion.texto;
+                boton.addEventListener("click", () => {
+                    puntos += opcion.puntos;
+                    if (actual < PREGUNTAS.length - 1) {
+                        actual++;
+                        pintarPregunta();
+                    } else {
+                        mostrarResultado();
+                    }
+                });
+                contenedor.appendChild(boton);
+            });
+        }
+
+        function mostrarResultado() {
+            const perfil = PERFILES.find(p => puntos >= p.min && puntos <= p.max);
+            document.getElementById("quiz-cuerpo").hidden = true;
+            document.getElementById("quiz-progreso").hidden = true;
+            document.getElementById("quiz-emoji").textContent = perfil.emoji;
+            document.getElementById("quiz-titulo").textContent = perfil.nombre;
+            document.getElementById("quiz-descripcion").textContent = perfil.descripcion;
+            document.getElementById("quiz-resultado").hidden = false;
+            definirMensaje(perfil.mensaje);
+        }
+
+        function reiniciar() {
+            actual = 0;
+            puntos = 0;
+            document.getElementById("quiz-cuerpo").hidden = false;
+            document.getElementById("quiz-progreso").hidden = false;
+            document.getElementById("quiz-resultado").hidden = true;
+            pintarPregunta();
+        }
+
+        pintarPregunta();
+    </script>
+
+</body>
+</html>

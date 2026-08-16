@@ -18,8 +18,9 @@
     <link rel="canonical" href="https://delafuen17.github.io/Finanzas-Web/maquina-tiempo.html">
 
     <meta name="description" content="La máquina del tiempo de la bolsa: invierte con datos reales del S&P 500 desde 1970 y descubre cuánto tendrías hoy si hubieras empezado a aportar cada mes.">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">    <link rel="stylesheet" href="style.css?v=4">
+    <script src="compartir.js"></script>
+
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -77,6 +78,15 @@
             </div>
 
             <p class="nota" id="comparacion"></p>
+
+            <div class="compartir">
+                <span class="etiqueta">Comparte tu resultado</span>
+                <div class="compartir-botones">
+                    <button type="button" class="compartir-btn whatsapp" onclick="compartirWhatsApp()">WhatsApp</button>
+                    <button type="button" class="compartir-btn x" onclick="compartirX()">X</button>
+                    <button type="button" class="compartir-btn copiar" onclick="copiarResultado()">Copiar</button>
+                </div>
+            </div>
 
             <p class="nota">Simulación con los cierres anuales reales del S&amp;P 500 (1970-2024), sin dividendos reinvertidos, sin impuestos ni comisiones. El pasado no garantiza el futuro: esto es una máquina del tiempo, no una bola de cristal.</p>
         </section>
@@ -166,6 +176,8 @@
             document.getElementById("resultado-final").textContent = formato(final);
             document.getElementById("resultado-aportado").textContent = formato(aportado);
             document.getElementById("resultado-intereses").textContent = formato(intereses);
+
+            definirMensaje(`Si en ${inicio} hubiera invertido ${formato(mensual)}/mes en el S&P 500, hoy tendría ${formato(final)}. Pruébalo:`);
 
             dibujarGrafico(serie);
 

@@ -18,8 +18,9 @@
     <link rel="canonical" href="https://delafuen17.github.io/Finanzas-Web/calculadora.html">
 
     <meta name="description" content="Calculadora de interés compuesto: descubre cuánto puede crecer tu dinero con aportaciones mensuales, rentabilidad y el paso del tiempo.">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">    <link rel="stylesheet" href="style.css?v=4">
+    <script src="compartir.js"></script>
+
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -89,6 +90,15 @@
                 </div>
             </div>
 
+            <div class="compartir">
+                <span class="etiqueta">Comparte tu resultado</span>
+                <div class="compartir-botones">
+                    <button type="button" class="compartir-btn whatsapp" onclick="compartirWhatsApp()">WhatsApp</button>
+                    <button type="button" class="compartir-btn x" onclick="compartirX()">X</button>
+                    <button type="button" class="compartir-btn copiar" onclick="copiarResultado()">Copiar</button>
+                </div>
+            </div>
+
             <p class="nota">Estimación orientativa. El interés se calcula de forma mensual y no tiene en cuenta impuestos ni comisiones.</p>
         </section>
 
@@ -129,6 +139,8 @@
             document.getElementById("resultado-final").textContent = formato(valor);
             document.getElementById("resultado-aportado").textContent = formato(totalAportado);
             document.getElementById("resultado-intereses").textContent = formato(intereses);
+
+            definirMensaje(`Invertir ${formato(aportacion)}/mes al ${interes}% durante ${anos} años = ${formato(valor)}. El interés compuesto funciona. Pruébalo:`);
 
             const anchoAportado = totalAportado > 0 ? (totalAportado / valor) * 100 : 0;
             const anchoIntereses = intereses > 0 ? (intereses / valor) * 100 : 0;

@@ -18,8 +18,9 @@
     <link rel="canonical" href="https://delafuen17.github.io/Finanzas-Web/reto-52-semanas.html">
 
     <meta name="description" content="Reto de ahorro de las 52 semanas: ahorra 1 € la primera semana, 2 € la segunda... y acaba el año con casi 1.400 €. Con seguimiento de progreso.">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">    <link rel="stylesheet" href="style.css?v=4">
+    <script src="compartir.js"></script>
+
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -51,6 +52,15 @@
                 <p id="reto-texto">0 de 52 semanas · 0 € ahorrados</p>
             </div>
         </section>
+
+        <div class="compartir">
+            <span class="etiqueta">Comparte tu progreso</span>
+            <div class="compartir-botones">
+                <button type="button" class="compartir-btn whatsapp" onclick="compartirWhatsApp()">WhatsApp</button>
+                <button type="button" class="compartir-btn x" onclick="compartirX()">X</button>
+                <button type="button" class="compartir-btn copiar" onclick="copiarResultado()">Copiar</button>
+            </div>
+        </div>
 
         <div class="reto-grid" id="reto-grid"></div>
 
@@ -116,6 +126,9 @@
 
             const ahorrado = [...completadas].reduce((a, s) => a + s, 0);
             const porcentaje = Math.round((completadas.size / 52) * 100);
+
+            const euros = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(ahorrado);
+            definirMensaje(`Voy por ${completadas.size}/52 semanas del reto de ahorro (${euros} ahorrados). ¿Te apuntas? Pruébalo:`);
             document.getElementById("reto-barra").style.width = porcentaje + "%";
             document.getElementById("reto-texto").textContent =
                 `${completadas.size} de 52 semanas · ${new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(ahorrado)} ahorrados`;

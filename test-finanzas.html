@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Cuánto sabes de finanzas? — Proyecto Finanzas</title>
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Proyecto Finanzas">
+    <meta property="og:title" content="¿Cuánto sabes de finanzas? — Proyecto Finanzas">
+    <meta property="og:description" content="Test de 10 preguntas de finanzas básicas con explicaciones. Consigue tu puntuación y reta a tus amigos a superarte.">
+    <meta property="og:url" content="https://delafuen17.github.io/Finanzas-Web/test-finanzas.html">
+    <meta property="og:image" content="https://delafuen17.github.io/Finanzas-Web/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="¿Cuánto sabes de finanzas? — Proyecto Finanzas">
+    <meta name="twitter:description" content="Test de 10 preguntas de finanzas básicas con explicaciones. Consigue tu puntuación y reta a tus amigos a superarte.">
+    <meta name="twitter:image" content="https://delafuen17.github.io/Finanzas-Web/og-image.png">
+    <link rel="canonical" href="https://delafuen17.github.io/Finanzas-Web/test-finanzas.html">
+
+    <meta name="description" content="Test de 10 preguntas de finanzas básicas con explicaciones. Consigue tu puntuación y reta a tus amigos a superarte.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css?v=4">
+    <script src="compartir.js"></script>
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "¿Cuánto sabes de finanzas? — Proyecto Finanzas",
+  "url": "https://delafuen17.github.io/Finanzas-Web/test-finanzas.html",
+  "description": "Test de 10 preguntas de finanzas básicas con explicaciones.",
+  "inLanguage": "es"
+}
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <h1>¿Cuánto sabes de finanzas?</h1>
+        <p>10 preguntas de finanzas básicas, con explicación en cada una. Consigue tu puntuación y reta a tus amigos.</p>
+    </header>
+
+    <main class="aprende">
+
+        <section>
+            <p class="quiz-progreso" id="quiz-progreso">Pregunta 1 de 10</p>
+            <div id="quiz-pregunta"></div>
+            <div class="quiz-botones">
+                <button type="button" class="boton" id="btn-siguiente" hidden onclick="siguiente()">Siguiente →</button>
+            </div>
+
+            <div class="quiz-resultado" id="quiz-resultado" hidden>
+                <span class="cantidad" id="quiz-puntuacion">0/10</span>
+                <h3 id="quiz-titulo"></h3>
+                <p id="quiz-descripcion"></p>
+                <div class="compartir">
+                    <span class="etiqueta">Comparte tu puntuación</span>
+                    <div class="compartir-botones quiz-botones">
+                        <button type="button" class="compartir-btn whatsapp" onclick="compartirWhatsApp()">WhatsApp</button>
+                        <button type="button" class="compartir-btn x" onclick="compartirX()">X</button>
+                        <button type="button" class="compartir-btn copiar" onclick="copiarResultado()">Copiar</button>
+                    </div>
+                </div>
+                <div class="quiz-botones">
+                    <button type="button" class="boton" onclick="reiniciar()">↺ Repetir el test</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p><a href="herramientas.html">← Volver a Herramientas</a> · <a href="aprende.html">Aprende</a> · <a href="privacidad.html">Privacidad</a> — Educación financiera</p>
+    </footer>
+
+    <script>
+        const PREGUNTAS = [
+            {
+                texto: "Inviertes 1.000 € al 5 % anual con interés compuesto durante 20 años. ¿Cuánto tendrás aproximadamente?",
+                opciones: ["1.500 €", "2.000 €", "2.650 €"],
+                correcta: 2,
+                explicacion: "Con interés compuesto: 1.000 × 1,05²⁰ ≈ 2.653 €. El interés del primer año también genera interés en los siguientes."
+            },
+            {
+                texto: "La regla del 72 sirve para...",
+                opciones: ["Calcular cuántos años tardas en duplicar tu dinero", "Dividir tu presupuesto mensual", "Calcular la inflación acumulada"],
+                correcta: 0,
+                explicacion: "Divide 72 entre el interés anual: al 7 %, tu dinero se duplica en unos 72/7 ≈ 10 años."
+            },
+            {
+                texto: "¿Qué es la TAE?",
+                opciones: ["El interés nominal sin gastos", "El coste o rentabilidad real, incluyendo comisiones", "Un impuesto sobre los ahorros"],
+                correcta: 1,
+                explicacion: "La TAE (Tasa Anual Equivalente) incluye intereses y comisiones: es lo que debes comparar entre ofertas."
+            },
+            {
+                texto: "Con una inflación del 3 % anual, 10.000 € bajo el colchón dentro de 10 años valdrán aproximadamente...",
+                opciones: ["Lo mismo: 10.000 €", "Más de 10.000 €", "Menos de 8.000 €"],
+                correcta: 2,
+                explicacion: "10.000 ÷ 1,03¹⁰ ≈ 7.440 € de poder adquisitivo. El dinero parado pierde valor cada año."
+            },
+            {
+                texto: "¿Qué es un ETF?",
+                opciones: ["Un fondo que cotiza en bolsa y suele replicar un índice", "Una criptomoneda", "Un tipo de préstamo bancario"],
+                correcta: 0,
+                explicacion: "Un ETF es un fondo que se compra y vende como una acción y normalmente replica índices como el S&P 500, con costes muy bajos."
+            },
+            {
+                texto: "¿Cuál es la recomendación habitual para el fondo de emergencia?",
+                opciones: ["1 mes de gastos", "3 a 6 meses de gastos", "2 años de gastos"],
+                correcta: 1,
+                explicacion: "Entre 3 y 6 meses de gastos en una cuenta fácil de liquidar, antes de empezar a invertir."
+            },
+            {
+                texto: "Diversificar significa...",
+                opciones: ["Invertir grandes cantidades de dinero", "Repartir el riesgo entre muchas inversiones distintas", "Tener cuentas en varios bancos"],
+                correcta: 1,
+                explicacion: "Si una empresa o sector cae, el resto de tu cartera te sostiene. Es la única 'comida gratis' de las finanzas."
+            },
+            {
+                texto: "En España, los traspasos entre fondos de inversión...",
+                opciones: ["Tributan en el momento", "No tributan hasta que rescatas", "Están prohibidos"],
+                correcta: 1,
+                explicacion: "Puedes cambiar de fondo sin pagar impuestos: solo tributas al reembolsar el dinero. Una gran ventaja de los fondos."
+            },
+            {
+                texto: "Si solo pagas el mínimo de una tarjeta con un 20 % TAE...",
+                opciones: ["La saldas en pocos meses", "La deuda crece muy rápido", "No pagas intereses"],
+                correcta: 1,
+                explicacion: "El interés compuesto juega en tu contra: una deuda de 1.000 € al 20 % TAE puede convertirse en más de 6.000 € en 10 años pagando el mínimo."
+            },
+            {
+                texto: "El S&P 500 es...",
+                opciones: ["Un índice de las 500 mayores empresas de EE. UU.", "Una agencia de calificación crediticia", "Un banco central"],
+                correcta: 0,
+                explicacion: "Es el índice de referencia mundial: históricamente ha rentado en torno al 7-10 % anual a largo plazo."
+            }
+        ];
+
+        const NIVELES = [
+            { min: 0, max: 4, titulo: "🌱 Empiezas en el camino", descripcion: "Todos empezamos aquí. Date una vuelta por la sección Aprende: interés compuesto, inflación y fondo de emergencia son los tres mejores puntos de partida." },
+            { min: 5, max: 6, titulo: "🙂 Vas por buen camino", descripcion: "Tienes las bases, pero hay conceptos que te fallan. Repasa los artículos de Aprende y en un par de semanas pasas al nivel superior." },
+            { min: 7, max: 8, titulo: "💪 Muy bien: dominas lo esencial", descripcion: "Entiendes cómo funciona el dinero de verdad. Ahora toca pasar a la práctica: calculadora de interés compuesto y el experimento de los gemelos." },
+            { min: 9, max: 10, titulo: "🏆 Nivel experto", descripcion: "Sabes más que el 90 % de la población. Comparte tu puntuación y presume: la educación financiera también se contagia." }
+        ];
+
+        let actual = 0;
+        let aciertos = 0;
+        let respondida = false;
+
+        function pintarPregunta() {
+            respondida = false;
+            const p = PREGUNTAS[actual];
+            document.getElementById("quiz-progreso").textContent = `Pregunta ${actual + 1} de ${PREGUNTAS.length}`;
+            const contenedor = document.getElementById("quiz-pregunta");
+            contenedor.innerHTML = `<div class="quiz-pregunta"><h3>${p.texto}</h3></div>`;
+            const bloque = contenedor.querySelector(".quiz-pregunta");
+            p.opciones.forEach((opcion, i) => {
+                const boton = document.createElement("button");
+                boton.type = "button";
+                boton.className = "quiz-opcion";
+                boton.textContent = opcion;
+                boton.addEventListener("click", () => responder(i, boton));
+                bloque.appendChild(boton);
+            });
+            document.getElementById("btn-siguiente").hidden = true;
+        }
+
+        function responder(elegida, boton) {
+            if (respondida) return;
+            respondida = true;
+
+            const p = PREGUNTAS[actual];
+            const opciones = document.querySelectorAll("#quiz-pregunta .quiz-opcion");
+            opciones.forEach((op, i) => {
+                op.disabled = true;
+                if (i === p.correcta) op.classList.add("correcta");
+                else if (i === elegida) op.classList.add("incorrecta");
+            });
+            if (elegida === p.correcta) aciertos++;
+
+            const explicacion = document.createElement("div");
+            explicacion.className = "quiz-explicacion";
+            explicacion.innerHTML = (elegida === p.correcta ? "✅ Correcto. " : "❌ La correcta era: <strong>" + p.opciones[p.correcta] + "</strong>. ") + p.explicacion;
+            document.getElementById("quiz-pregunta").appendChild(explicacion);
+
+            document.getElementById("btn-siguiente").hidden = false;
+            document.getElementById("btn-siguiente").textContent =
+                actual < PREGUNTAS.length - 1 ? "Siguiente →" : "Ver mi puntuación →";
+        }
+
+        function siguiente() {
+            if (actual < PREGUNTAS.length - 1) {
+                actual++;
+                pintarPregunta();
+            } else {
+                mostrarResultado();
+            }
+        }
+
+        function mostrarResultado() {
+            document.getElementById("quiz-pregunta").hidden = true;
+            document.getElementById("quiz-progreso").hidden = true;
+            document.getElementById("btn-siguiente").hidden = true;
+
+            const nivel = NIVELES.find(n => aciertos >= n.min && aciertos <= n.max);
+            document.getElementById("quiz-puntuacion").textContent = aciertos + "/10";
+            document.getElementById("quiz-titulo").textContent = nivel.titulo;
+            document.getElementById("quiz-descripcion").textContent = nivel.descripcion;
+            document.getElementById("quiz-resultado").hidden = false;
+
+            definirMensaje(`Saco ${aciertos}/10 en el test de finanzas básicas. ¿Crees que me superas? Pruébalo:`);
+        }
+
+        function reiniciar() {
+            actual = 0;
+            aciertos = 0;
+            document.getElementById("quiz-pregunta").hidden = false;
+            document.getElementById("quiz-progreso").hidden = false;
+            document.getElementById("quiz-resultado").hidden = true;
+            pintarPregunta();
+        }
+
+        pintarPregunta();
+    </script>
+
+</body>
+</html>

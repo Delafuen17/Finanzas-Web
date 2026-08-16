@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Independencia financiera (FIRE) — Proyecto Finanzas</title>
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Proyecto Finanzas">
+    <meta property="og:title" content="Independencia financiera (FIRE) — Proyecto Finanzas">
+    <meta property="og:description" content="Descubre tu número FIRE: cuánto necesitas para vivir de tus inversiones y cuántos años te faltan según lo que ahorras cada mes.">
+    <meta property="og:url" content="https://delafuen17.github.io/Finanzas-Web/independencia-financiera.html">
+    <meta property="og:image" content="https://delafuen17.github.io/Finanzas-Web/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Independencia financiera (FIRE) — Proyecto Finanzas">
+    <meta name="twitter:description" content="Descubre tu número FIRE: cuánto necesitas para vivir de tus inversiones y cuántos años te faltan según lo que ahorras cada mes.">
+    <meta name="twitter:image" content="https://delafuen17.github.io/Finanzas-Web/og-image.png">
+    <link rel="canonical" href="https://delafuen17.github.io/Finanzas-Web/independencia-financiera.html">
+
+    <meta name="description" content="Descubre tu número FIRE: cuánto necesitas para vivir de tus inversiones y cuántos años te faltan según lo que ahorras cada mes.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css?v=4">
+    <script src="compartir.js"></script>
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Independencia financiera (FIRE) — Proyecto Finanzas",
+  "url": "https://delafuen17.github.io/Finanzas-Web/independencia-financiera.html",
+  "description": "Calcula tu número FIRE y cuántos años te faltan para vivir de tus inversiones.",
+  "inLanguage": "es"
+}
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <h1>Independencia financiera (FIRE)</h1>
+        <p>Tu "número FIRE": cuánto necesitas acumulado para vivir de tus inversiones, y cuántos años te faltan según lo que ahorras.</p>
+    </header>
+
+    <main class="calculadora">
+
+        <section class="formulario">
+            <h2>Tus datos</h2>
+
+            <label for="gastos">Gastos mensuales (€)</label>
+            <input type="number" id="gastos" min="0" step="any" value="1500" inputmode="decimal">
+
+            <label for="patrimonio">Patrimonio actual invertido (€)</label>
+            <input type="number" id="patrimonio" min="0" step="any" value="0" inputmode="decimal">
+
+            <label for="ahorro">Ahorro mensual que puedes invertir (€)</label>
+            <input type="number" id="ahorro" min="0" step="any" value="300" inputmode="decimal">
+
+            <label for="rentabilidad">Rentabilidad anual esperada (%)</label>
+            <input type="number" id="rentabilidad" min="0" step="any" value="6" inputmode="decimal">
+
+            <button id="calcular" onclick="calcular()">Calcular mi número</button>
+        </section>
+
+        <section class="resultados" id="resultados">
+            <h2>Tu independencia financiera</h2>
+
+            <div class="resultado-grande">
+                <span class="etiqueta">Tu número FIRE</span>
+                <span class="cantidad" id="resultado-fire">—</span>
+            </div>
+
+            <div class="desglose">
+                <div>
+                    <span class="etiqueta">Años hasta conseguirlo</span>
+                    <span class="cantidad" id="resultado-tiempo">—</span>
+                </div>
+                <div>
+                    <span class="etiqueta">Renta anual que te daría (4 %)</span>
+                    <span class="cantidad" id="resultado-renta">—</span>
+                </div>
+            </div>
+
+            <div class="barras">
+                <div class="barra-fila">
+                    <span class="barra-etiqueta">Progreso</span>
+                    <div class="barra-contenedor"><div class="barra" id="barra-progreso"></div></div>
+                </div>
+            </div>
+
+            <div class="compartir">
+                <span class="etiqueta">Comparte tu número</span>
+                <div class="compartir-botones">
+                    <button type="button" class="compartir-btn whatsapp" onclick="compartirWhatsApp()">WhatsApp</button>
+                    <button type="button" class="compartir-btn x" onclick="compartirX()">X</button>
+                    <button type="button" class="compartir-btn copiar" onclick="copiarResultado()">Copiar</button>
+                </div>
+            </div>
+
+            <p class="nota">La regla del 4 %: si retiras un 4 % anual de tu cartera, el capital tiene altas probabilidades de aguantar 30+ años. Estimación orientativa con interés compuesto mensual, sin impuestos ni comisiones. No es asesoramiento financiero.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p><a href="herramientas.html">← Volver a Herramientas</a> · <a href="privacidad.html">Privacidad</a> — Educación financiera</p>
+    </footer>
+
+    <script>
+        function formato(valor) {
+            return new Intl.NumberFormat("es-ES", {
+                style: "currency",
+                currency: "EUR",
+                maximumFractionDigits: 0
+            }).format(Math.round(valor));
+        }
+
+        function calcular() {
+            const gastos = parseFloat(document.getElementById("gastos").value) || 0;
+            const patrimonio = parseFloat(document.getElementById("patrimonio").value) || 0;
+            const ahorro = parseFloat(document.getElementById("ahorro").value) || 0;
+            const rentabilidad = parseFloat(document.getElementById("rentabilidad").value) || 0;
+
+            const numeroFire = gastos * 12 * 25;
+            document.getElementById("resultado-fire").textContent = formato(numeroFire);
+            document.getElementById("resultado-renta").textContent = formato(numeroFire * 0.04 / 12);
+
+            const progreso = numeroFire > 0 ? Math.min(100, (patrimonio / numeroFire) * 100) : 0;
+            document.getElementById("barra-progreso").style.width = progreso + "%";
+
+            let tiempo;
+            if (gastos <= 0) {
+                tiempo = "Introduce tus gastos";
+            } else if (patrimonio >= numeroFire) {
+                tiempo = "¡Ya lo has conseguido! 🎉";
+            } else if (ahorro <= 0) {
+                tiempo = "Sin ahorro mensual";
+            } else {
+                // Simulación mes a mes hasta alcanzar el número FIRE.
+                const tasaMensual = rentabilidad / 100 / 12;
+                let riqueza = patrimonio;
+                let meses = 0;
+                while (riqueza < numeroFire && meses < 60 * 12) {
+                    meses++;
+                    riqueza = riqueza * (1 + tasaMensual) + ahorro;
+                }
+                tiempo = meses >= 60 * 12
+                    ? "+ de 60 años"
+                    : (meses < 12 ? meses + " meses" : Math.floor(meses / 12) + " años y " + (meses % 12) + " meses");
+            }
+            document.getElementById("resultado-tiempo").textContent = tiempo;
+
+            definirMensaje(`Mi número FIRE es ${formato(numeroFire)}: ${tiempo.toLowerCase()} para vivir de mis inversiones. ¿Cuál es el tuyo? Pruébalo:`);
+        }
+
+        calcular();
+    </script>
+
+</body>
+</html>

@@ -1268,6 +1268,171 @@ main.calculadora section:hover {
     }
 }
 
+/* ---- Compartir resultados ---- */
+
+.compartir {
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #cfe0d8;
+}
+
+.compartir .etiqueta {
+    margin-bottom: 0.5rem;
+}
+
+.compartir-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.compartir-btn {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.compartir-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+}
+
+.compartir-btn.whatsapp {
+    background: #25d366;
+    color: #fff;
+}
+
+.compartir-btn.x {
+    background: #111;
+    color: #fff;
+}
+
+.compartir-btn.copiar {
+    background: var(--blanco);
+    color: var(--verde);
+    border-color: rgba(39, 160, 107, 0.35);
+}
+
+/* ---- Cita para compartir (artículos) ---- */
+
+.cita {
+    background: #eef6f1;
+    border-left: 4px solid var(--verde-claro);
+    border-radius: 8px;
+    padding: 1.1rem 1.3rem;
+    margin: 1.6rem 0 0;
+    text-align: center;
+}
+
+.cita p {
+    color: var(--verde-oscuro) !important;
+    font-size: 1.05rem;
+    font-style: italic;
+    margin: 0 0 0.7rem;
+}
+
+.cita .compartir-btn {
+    display: inline-block;
+    margin: 0 auto;
+}
+
+/* ---- Quizzes ---- */
+
+.quiz-pregunta {
+    margin-bottom: 1.8rem;
+}
+
+.quiz-pregunta h3 {
+    font-size: 1.15rem;
+    color: var(--verde-oscuro);
+    margin-bottom: 0.8rem;
+}
+
+.quiz-opcion {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.6rem;
+    font-family: inherit;
+    font-size: 0.98rem;
+    color: var(--texto);
+    background: var(--blanco);
+    border: 1px solid #cfe0d8;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.quiz-opcion:hover {
+    border-color: var(--verde-claro);
+    background: #eef6f1;
+}
+
+.quiz-opcion.seleccionada {
+    border-color: var(--verde);
+    background: rgba(39, 160, 107, 0.12);
+    font-weight: 600;
+}
+
+.quiz-opcion.correcta {
+    border-color: var(--verde);
+    background: rgba(39, 160, 107, 0.15);
+    color: var(--verde-oscuro);
+}
+
+.quiz-opcion.incorrecta {
+    border-color: #d9a500;
+    background: #fff8e6;
+}
+
+.quiz-progreso {
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+    margin-bottom: 1rem;
+}
+
+.quiz-explicacion {
+    font-size: 0.92rem;
+    color: var(--texto-suave);
+    background: #eef6f1;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.8rem;
+}
+
+.quiz-resultado {
+    text-align: center;
+    padding: 0.5rem 0;
+}
+
+.quiz-resultado .cantidad {
+    font-size: 2.2rem;
+}
+
+.quiz-resultado h3 {
+    color: var(--verde-oscuro);
+    font-size: 1.4rem;
+    margin: 0.6rem 0;
+}
+
+.quiz-botones {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-top: 1.2rem;
+}
+
+.quiz-botones .boton {
+    margin-top: 0;
+}
+
 @media (max-width: 700px) {
     main.calculadora {
         grid-template-columns: 1fr;
