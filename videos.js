@@ -40,11 +40,11 @@
         const n = v.name.toLowerCase();
         let p = 0;
         if (/^es-es/.test(v.lang)) p += 2;
+        if (/online|natural|neural/.test(n)) p += 4; // voces neurales online (Edge/Google)
         if (/google/.test(n)) p += 3;
-        if (/neural/.test(n)) p += 3;
-        if (/premium|enhanced|natural/.test(n)) p += 2;
+        if (/premium|enhanced/.test(n)) p += 2;
         if (/siri|monica|paulina|sara|diego/.test(n)) p += 1;
-        if (/helena|hauwa|sabina|jorge|libby|desktop|mobile|female|male/.test(n)) p -= 1;
+        if (/^microsoft/.test(n) && !/online/.test(n)) p -= 1; // Microsoft offline genéricas
         return p;
     }
 
