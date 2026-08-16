@@ -318,6 +318,52 @@ main.articulo .resumen a:hover {
     text-decoration: underline;
 }
 
+/* ---- Sigue leyendo (artículos relacionados) ---- */
+
+.relacionados {
+    background: #eef6f1;
+    border: 1px solid var(--verde-claro);
+    border-radius: var(--radio);
+    padding: 1.1rem 1.4rem;
+    margin-top: 1.8rem;
+}
+
+.relacionados h3 {
+    font-size: 1rem;
+    color: var(--verde-oscuro);
+    margin: 0 0 0.5rem;
+}
+
+main.articulo .relacionados ul,
+.relacionados ul {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+main.articulo .relacionados li,
+.relacionados li {
+    margin-bottom: 0.35rem;
+}
+
+.relacionados li:last-child {
+    margin-bottom: 0;
+}
+
+.relacionados a {
+    color: var(--verde);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.relacionados a:hover {
+    text-decoration: underline;
+}
+
+main.calculadora .relacionados {
+    grid-column: 1 / -1;
+}
+
 /* ---- Tarjetas clicables (Aprende) ---- */
 
 .tarjeta-tema {
