@@ -20,7 +20,7 @@ Todo gratis, sin registro y sin necesidad de saber nada de finanzas para empezar
 | 🧪 **Experimentos** | La máquina del tiempo de la bolsa (con datos reales del S&P 500), el experimento de los gemelos y el reto de las 52 semanas. |
 | 🎬 **Vídeos explicativos** | Explicadores animados de ~1 minuto con narración en español, generados en el propio navegador (Web Speech API). Disponibles en los artículos principales. |
 | 🤖 **Asistente de inversión** | Pregunta lo que quieras sobre finanzas, inversión y bolsa y recibe respuestas educativas (con IA Gemini). *No es un asesor financiero.* |
-| 📈 **Mercados en tiempo real** | Gráfica propia (SVG) con 7 activos seleccionables: S&P 500, IBEX 35, Nasdaq 100, DAX, Euro Stoxx 50, Bitcoin y Oro. Los datos se descargan solos cada 2 horas (yfinance + GitHub Actions). |
+| 📈 **Mercados en tiempo real** | Gráfica propia (SVG) con 13 activos seleccionables (S&P 500, IBEX 35, Nasdaq 100, DAX, Euro Stoxx 50, Nikkei 225, FTSE 100, CAC 40, Bitcoin, Ethereum, Oro, Plata y Petróleo Brent), interactiva al pasar el ratón. Los datos se descargan solos cada 2 horas (yfinance + GitHub Actions). |
 | 🎯 **Test y perfil** | ¿Cuánto sabes de finanzas? y ¿qué perfil de inversor eres? Con resultados compartibles. |
 | 📖 **Glosario** | Más de 30 términos financieros explicados sin tecnicismos, con buscador. |
 | 📬 **Newsletter** | Contenido mensual sencillo sobre inversión y finanzas, sin spam (EmailOctopus). |

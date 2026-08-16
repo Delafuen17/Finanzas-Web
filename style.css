@@ -761,14 +761,57 @@ main .mercados {
     color: var(--texto-suave);
 }
 
+.mercados-periodo {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--texto-suave);
+    margin-top: 0.15rem;
+}
+
+.mercados-periodo.sube {
+    color: #27a06b;
+}
+
+.mercados-periodo.baja {
+    color: #d64545;
+}
+
 .mercados-grafico {
+    position: relative;
     margin-bottom: 0.6rem;
+    cursor: crosshair;
 }
 
 .mercados-svg {
     display: block;
     width: 100%;
     height: auto;
+}
+
+.mercados-tooltip {
+    position: absolute;
+    top: 0.4rem;
+    transform: translateX(-50%);
+    background: #12341f;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    pointer-events: none;
+    display: none;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    z-index: 5;
+}
+
+.mercados-tooltip b {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    opacity: 0.85;
+    margin-bottom: 0.1rem;
 }
 
 .mercados-pie {

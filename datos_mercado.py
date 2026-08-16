@@ -13,17 +13,23 @@ import sys
 import yfinance as yf
 
 ACTIVOS = [
-    {"clave": "SPX",  "nombre": "S&P 500",      "simbolo": "^GSPC"},
-    {"clave": "IBEX", "nombre": "IBEX 35",      "simbolo": "^IBEX"},
-    {"clave": "NDX",  "nombre": "Nasdaq 100",   "simbolo": "^NDX"},
-    {"clave": "DAX",  "nombre": "DAX",          "simbolo": "^GDAXI"},
-    {"clave": "SX5E", "nombre": "Euro Stoxx 50", "simbolo": "^STOXX50E"},
-    {"clave": "BTC",  "nombre": "Bitcoin",      "simbolo": "BTC-USD"},
-    {"clave": "XAU",  "nombre": "Oro",          "simbolo": "GC=F"},
+    {"clave": "SPX",  "nombre": "S&P 500",         "simbolo": "^GSPC"},
+    {"clave": "IBEX", "nombre": "IBEX 35",         "simbolo": "^IBEX"},
+    {"clave": "NDX",  "nombre": "Nasdaq 100",      "simbolo": "^NDX"},
+    {"clave": "DAX",  "nombre": "DAX",             "simbolo": "^GDAXI"},
+    {"clave": "SX5E", "nombre": "Euro Stoxx 50",   "simbolo": "^STOXX50E"},
+    {"clave": "N225", "nombre": "Nikkei 225",      "simbolo": "^N225"},
+    {"clave": "FTSE", "nombre": "FTSE 100",        "simbolo": "^FTSE"},
+    {"clave": "FCHI", "nombre": "CAC 40",          "simbolo": "^FCHI"},
+    {"clave": "BTC",  "nombre": "Bitcoin",         "simbolo": "BTC-USD"},
+    {"clave": "ETH",  "nombre": "Ethereum",        "simbolo": "ETH-USD"},
+    {"clave": "XAU",  "nombre": "Oro",             "simbolo": "GC=F"},
+    {"clave": "SI",   "nombre": "Plata",           "simbolo": "SI=F"},
+    {"clave": "BZ",   "nombre": "Petróleo Brent",  "simbolo": "BZ=F"},
 ]
 
 RUTA = "datos/mercados.json"
-SESIONES_MAX = 60
+SESIONES_MAX = 90
 
 
 def leer_anterior():
@@ -43,7 +49,7 @@ def principal():
 
     for a in ACTIVOS:
         try:
-            d = yf.download(a["simbolo"], period="2mo", interval="1d",
+            d = yf.download(a["simbolo"], period="3mo", interval="1d",
                             progress=False, auto_adjust=False)
             if len(d) == 0:
                 print(f"- {a['clave']}: sin datos, se mantiene el anterior")
