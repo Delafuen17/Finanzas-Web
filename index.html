@@ -20,7 +20,7 @@
     <meta name="google-site-verification" content="bId7FrFO8RDR_F640RPJFP61GOo5WOC-G3VNa5ymSi4" />
 
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="style.css?v=15">
+    <link rel="stylesheet" href="style.css?v=16">
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -95,52 +95,57 @@
             </p>
             <div id="panel-mercados"></div>
 
-            <h3 class="mercados-subtitulo">Índices bursátiles en tiempo real</h3>
-            <div class="mercados-graficas">
-
-                <div class="mercados-grafica">
-                    <!-- TradingView Widget BEGIN -->
-                    <div class="tradingview-widget-container">
-                        <div class="tradingview-widget-container__widget"></div>
-                        <div class="tradingview-widget-copyright"><a href="https://es.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Gráficas</span> por TradingView</a></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-                        {
-                        "autosize": true,
-                        "symbol": "TVC:SPX",
-                        "interval": "D",
-                        "timezone": "Europe/Madrid",
-                        "theme": "light",
-                        "style": "1",
-                        "locale": "es",
-                        "allow_symbol_change": true
-                        }
-                        </script>
-                    </div>
-                    <!-- TradingView Widget END -->
-                </div>
-
-                <div class="mercados-grafica">
-                    <!-- TradingView Widget BEGIN -->
-                    <div class="tradingview-widget-container">
-                        <div class="tradingview-widget-container__widget"></div>
-                        <div class="tradingview-widget-copyright"><a href="https://es.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Gráficas</span> por TradingView</a></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-                        {
-                        "autosize": true,
-                        "symbol": "TVC:IBEX35",
-                        "interval": "D",
-                        "timezone": "Europe/Madrid",
-                        "theme": "light",
-                        "style": "1",
-                        "locale": "es",
-                        "allow_symbol_change": true
-                        }
-                        </script>
-                    </div>
-                    <!-- TradingView Widget END -->
-                </div>
-
+            <h3 class="mercados-subtitulo">Gráfica de mercados (elige el activo)</h3>
+            <div class="mercados-tv-chips">
+                <button type="button" class="mercado-chip mercado-tv-chip activo" data-symbol="TVC:SPX">S&P 500</button>
+                <button type="button" class="mercado-chip mercado-tv-chip" data-symbol="TVC:IBEX35">IBEX 35</button>
+                <button type="button" class="mercado-chip mercado-tv-chip" data-symbol="TVC:NDX">Nasdaq 100</button>
+                <button type="button" class="mercado-chip mercado-tv-chip" data-symbol="TVC:DAX">DAX</button>
+                <button type="button" class="mercado-chip mercado-tv-chip" data-symbol="TVC:SX5E">Euro Stoxx 50</button>
+                <button type="button" class="mercado-chip mercado-tv-chip" data-symbol="BINANCE:BTCUSDT">Bitcoin</button>
+                <button type="button" class="mercado-chip mercado-tv-chip" data-symbol="OANDA:XAUUSD">Oro</button>
             </div>
+            <div class="mercados-grafica-unica">
+                <!-- TradingView Widget BEGIN -->
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <div class="tradingview-widget-copyright"><a href="https://es.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Gráfica</span> por TradingView</a></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                    {
+                    "autosize": true,
+                    "symbol": "TVC:SPX",
+                    "interval": "D",
+                    "timezone": "Europe/Madrid",
+                    "theme": "light",
+                    "style": "1",
+                    "locale": "es",
+                    "allow_symbol_change": true
+                    }
+                    </script>
+                </div>
+                <!-- TradingView Widget END -->
+            </div>
+            <script type="text/javascript">
+            (function () {
+                var conectar = function () {
+                    var w = window.TradingView && TradingView.widget ? TradingView.widget() : null;
+                    if (!w || !w.chart) return;
+                    var chips = document.querySelectorAll(".mercado-tv-chip");
+                    chips.forEach(function (chip) {
+                        chip.addEventListener("click", function () {
+                            w.chart().setSymbol(chip.getAttribute("data-symbol"));
+                            chips.forEach(function (c) { c.classList.remove("activo"); });
+                            chip.classList.add("activo");
+                        });
+                    });
+                };
+                if (window.TradingView && TradingView.onready) {
+                    TradingView.onready(conectar);
+                } else {
+                    window.addEventListener("load", conectar);
+                }
+            })();
+            </script>
         </section>
 
     </main>
