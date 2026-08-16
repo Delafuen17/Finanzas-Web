@@ -364,6 +364,281 @@ main.calculadora .relacionados {
     grid-column: 1 / -1;
 }
 
+/* ---- Vídeos explicativos (Proyecto Finanzas) ---- */
+
+.video-ia {
+    background: var(--blanco);
+    border: 1px solid var(--verde-claro);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    padding: 1.2rem 1.4rem;
+    margin: 1.5rem 0;
+}
+
+.video-ia-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+}
+
+.video-ia-titulo {
+    font-weight: 700;
+    color: var(--verde-oscuro);
+    font-size: 1.05rem;
+}
+
+.video-ia-creador {
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+    background: #eef6f1;
+    border-radius: 999px;
+    padding: 0.2rem 0.7rem;
+}
+
+.video-ia-escenario {
+    position: relative;
+    min-height: 240px;
+    background: linear-gradient(180deg, #f2faf6, #e7f3ec);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-align: center;
+    padding: 1rem;
+}
+
+.video-ia-subtitulo {
+    margin: 0.8rem 0 0.5rem;
+    font-size: 0.95rem;
+    color: var(--texto);
+    min-height: 2.6em;
+    text-align: center;
+    line-height: 1.45;
+}
+
+.video-ia-progreso {
+    height: 6px;
+    background: #e3ece7;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 0.8rem;
+}
+
+.video-ia-progreso-barra {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--verde-claro), var(--verde));
+    border-radius: 999px;
+    transition: width 0.15s linear;
+}
+
+.video-ia-controles {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.video-ia-boton {
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    border-radius: 999px;
+    padding: 0.55rem 1.3rem;
+    background: var(--verde);
+    color: #fff;
+    transition: background 0.15s;
+}
+
+.video-ia-boton:hover {
+    background: var(--verde-oscuro);
+}
+
+.video-ia-boton:focus-visible {
+    outline: 3px solid var(--verde-claro);
+    outline-offset: 2px;
+}
+
+/* Escenario: elementos de los vídeos */
+
+.vic-cifra {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--verde-oscuro);
+    line-height: 1.2;
+}
+
+.vic-nota {
+    margin-top: 0.5rem;
+    color: var(--texto-suave);
+    font-size: 0.95rem;
+}
+
+.vic-grafico {
+    display: flex;
+    gap: 2.5rem;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    max-width: 30rem;
+}
+
+.vic-columna {
+    flex: 1;
+    text-align: center;
+}
+
+.vic-barra-pista {
+    height: 170px;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid #d9e7e0;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    margin: 0.3rem 0;
+}
+
+.vic-barra {
+    width: 100%;
+    border-radius: 6px 6px 0 0;
+    transition: height 0.05s linear;
+}
+
+.vic-simple {
+    background: linear-gradient(180deg, #8fc3ab, #6aa98e);
+}
+
+.vic-compuesto {
+    background: linear-gradient(180deg, var(--verde-claro), var(--verde-oscuro));
+    transform-origin: bottom;
+}
+
+.vic-valor {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--verde-oscuro);
+}
+
+.vic-barra-etiqueta {
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+}
+
+.vic-monedas {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    justify-content: center;
+}
+
+.vic-moeda-bloque,
+.vic-cart-bloque {
+    text-align: center;
+}
+
+.vic-moeda {
+    font-size: 4.5rem;
+    line-height: 1;
+    transform-origin: center;
+}
+
+.vic-cart {
+    font-size: 4rem;
+    line-height: 1;
+    transform-origin: center;
+}
+
+.vic-jarra-bloque {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.vic-jarra {
+    position: relative;
+    width: 120px;
+    height: 210px;
+    border: 4px solid var(--verde-oscuro);
+    border-radius: 14px 14px 22px 22px;
+    background: rgba(255, 255, 255, 0.85);
+    overflow: hidden;
+}
+
+.vic-liquido {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, var(--verde-claro), var(--verde));
+    border-radius: 8px 8px 0 0;
+    transition: height 0.05s linear;
+}
+
+.vic-marca {
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    border-top: 2px dashed rgba(15, 61, 46, 0.35);
+    font-size: 0.62rem;
+    color: var(--texto-suave);
+    text-align: right;
+    padding-top: 2px;
+}
+
+.vic-jarra-info {
+    text-align: left;
+}
+
+.vic-pie-bloque {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.vic-pie {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transform-origin: center;
+}
+
+.vic-leyenda {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+}
+
+.vic-ley {
+    font-size: 0.9rem;
+    color: var(--texto);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.vic-ley i {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.vic-ley b {
+    color: var(--verde-oscuro);
+    margin-left: 0.2rem;
+}
+
 /* ---- Tarjetas clicables (Aprende) ---- */
 
 .tarjeta-tema {
