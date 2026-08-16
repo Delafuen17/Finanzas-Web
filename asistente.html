@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistente de inversión — Proyecto Finanzas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Asistente de inversión</h1>
+        <p>Pregúntale cualquier cosa sobre en qué invertir, ahorro y finanzas.</p>
+    </header>
+
+    <main class="asistente">
+
+        <div class="aviso">
+            <strong>⚠️ Aviso importante:</strong> soy una <strong>inteligencia artificial</strong> con formación
+            en educación financiera, no un asesor financiero registrado. Mis respuestas son <strong>orientativas
+            y pueden contener errores</strong>. No tomes decisiones de inversión basándote solo en lo que te
+            diga: infórmate y, si lo necesitas, consulta a un profesional.
+        </div>
+
+        <section class="chat">
+
+            <div class="chat-mensajes" id="mensajes">
+                <div class="mensaje ia">
+                    <p>Hola 👋 Soy el asistente de inversión de Proyecto Finanzas. Puedes preguntarme sobre
+                    en qué invertir, cuánto riesgo asumir, fondos indexados, interés compuesto y más.
+                    Recuerda que soy una IA: mis respuestas son educativas, no asesoramiento financiero.</p>
+                </div>
+            </div>
+
+            <div class="chips" id="chips">
+                <button class="chip" onclick="preguntaSugerida('¿En qué debería invertir si soy principiante?')">¿En qué invertir si soy principiante?</button>
+                <button class="chip" onclick="preguntaSugerida('¿Es mejor ahorrar o invertir?')">¿Ahorrar o invertir?</button>
+                <button class="chip" onclick="preguntaSugerida('¿Qué es un fondo indexado y cómo funciona?')">¿Qué es un fondo indexado?</button>
+                <button class="chip" onclick="preguntaSugerida('¿Cuánto riesgo debo asumir según mi edad?')">¿Cuánto riesgo asumir?</button>
+            </div>
+
+            <div class="barra-input">
+                <input type="text" id="entrada" placeholder="Escribe tu pregunta sobre inversión..." autocomplete="off">
+                <button id="enviar" onclick="enviar()">Enviar</button>
+                <button class="nuevo" onclick="nuevaConversacion()" title="Empezar de nuevo">↺</button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p><a href="index.html">← Volver a Proyecto Finanzas</a> — Educación financiera</p>
+    </footer>
+
+    <script>
+        const API_KEY = "CLAVE_GEMINI";
+        const MODELO = "gemini-3.5-flash";
+        const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/interactions?key=" + API_KEY;
+
+        let interaccionId = null;
+        let ocupado = false;
+
+        const INSTRUCCIONES = [
+            "Eres el 'Asistente de inversión' de 'Proyecto Finanzas', una web de educación financiera en español.",
+            "Tu misión es educar con claridad a personas que están empezando: ahorro, presupuesto, interés compuesto, fondos indexados, ETFs, diversificación, riesgo, deudas, inflación.",
+            "Reglas:",
+            "1. Responde en español, de forma sencilla y didáctica, como si explicaras a un amigo. Evita tecnicismos sin explicarlos.",
+            "2. NO eres un asesor financiero: no des recomendaciones personalizadas de compra ('compra X acción'), ni prometas rentabilidades ni garantices resultados.",
+            "3. Explica siempre el razonamiento y los riesgos. Recuerda que toda inversión conlleva riesgo y que el pasado no garantiza el futuro.",
+            "4. Si te preguntan por un producto concreto (acciones, criptomonedas, planes de pensiones...), da información general educativa y señala los riesgos, sin recomendar comprar ni vender.",
+            "5. Al dar cualquier consejo o respuesta sobre decisiones de dinero, termina con una breve nota: que eres una IA y que no hay que seguir tus consejos a ciegas, y que si la duda es importante consulte a un profesional.",
+            "6. Sé breve y directo: responde en párrafos cortos (2-5 párrafos máximo) salvo que la pregunta pida más detalle."
+        ].join("\n");
+
+        function agregarMensaje(texto, esUsuario) {
+            const div = document.createElement("div");
+            div.className = "mensaje " + (esUsuario ? "usuario" : "ia");
+            const p = document.createElement("p");
+            p.textContent = texto;
+            div.appendChild(p);
+            document.getElementById("mensajes").appendChild(div);
+            document.getElementById("mensajes").scrollTop = document.getElementById("mensajes").scrollHeight;
+            return div;
+        }
+
+        function mostrarEscribiendo() {
+            const div = document.createElement("div");
+            div.className = "mensaje ia escribiendo";
+            div.innerHTML = "<span class='punto'></span><span class='punto'></span><span class='punto'></span>";
+            div.id = "escribiendo";
+            document.getElementById("mensajes").appendChild(div);
+            document.getElementById("mensajes").scrollTop = document.getElementById("mensajes").scrollHeight;
+        }
+
+        function quitarEscribiendo() {
+            const el = document.getElementById("escribiendo");
+            if (el) el.remove();
+        }
+
+        async function enviar(texto) {
+            const entrada = document.getElementById("entrada");
+            const pregunta = (texto || entrada.value).trim();
+            if (!pregunta || ocupado) return;
+
+            ocupado = true;
+            entrada.value = "";
+            agregarMensaje(pregunta, true);
+            mostrarEscribiendo();
+
+            try {
+                const input = interaccionId
+                    ? pregunta
+                    : INSTRUCCIONES + "\n\nPregunta del usuario:\n" + pregunta;
+
+                const body = { model: MODELO, input: input };
+                if (interaccionId) body.previous_interaction_id = interaccionId;
+
+                const res = await fetch(ENDPOINT, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body)
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    if (res.status === 429) {
+                        throw new Error("He agotado el límite gratuito de peticiones por un momento. Espera unos segundos y vuelve a intentarlo. 😅");
+                    }
+                    throw new Error("Lo siento, ha habido un error al contactar conmigo. Inténtalo de nuevo en un momento.");
+                }
+
+                interaccionId = data.id || interaccionId;
+
+                const salida = (data.steps || [])
+                    .filter(s => s.type === "model_output")
+                    .map(s => (s.content || []).map(c => c.text || "").join(""))
+                    .join("\n\n");
+
+                quitarEscribiendo();
+                if (salida) {
+                    agregarMensaje(salida, false);
+                } else {
+                    agregarMensaje("No he podido generar una respuesta. Prueba con otra pregunta.", false);
+                }
+            } catch (err) {
+                quitarEscribiendo();
+                agregarMensaje(err.message || "Error inesperado. Inténtalo de nuevo.", false);
+            } finally {
+                ocupado = false;
+                entrada.focus();
+            }
+        }
+
+        function preguntaSugerida(texto) {
+            document.getElementById("entrada").value = texto;
+            enviar(texto);
+        }
+
+        function nuevaConversacion() {
+            interaccionId = null;
+            const contenedor = document.getElementById("mensajes");
+            contenedor.innerHTML = "";
+            agregarMensaje("Nueva conversación iniciada. ¿Sobre qué quieres preguntar? (Recuerda: soy una IA y mi consejo no sustituye a un profesional)", false);
+        }
+
+        document.getElementById("entrada").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") enviar();
+        });
+    </script>
+
+</body>
+</html>
