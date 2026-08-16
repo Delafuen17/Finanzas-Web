@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://delafuen17.github.io/Finanzas-Web/sitemap.xml
