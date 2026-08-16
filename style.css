@@ -41,7 +41,7 @@ header h1 {
 
 header p {
     font-size: 1.15rem;
-    opacity: 0.9;
+    color: rgba(255, 255, 255, 0.97);
     max-width: 34rem;
     margin: 0 auto;
 }
@@ -102,14 +102,19 @@ section p {
 
 footer {
     background: var(--verde-oscuro);
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.9);
     text-align: center;
     padding: 1.2rem;
     font-size: 0.9rem;
 }
 
 footer a {
-    color: rgba(255, 255, 255, 0.75);
+    color: #c9f0dc;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
 }
 
 /* ---- Sección Aprende ---- */
@@ -136,12 +141,20 @@ main.aprende {
 }
 
 .dato-curioso p {
-    color: rgba(255, 255, 255, 0.92);
+    color: rgba(255, 255, 255, 0.97);
     font-size: 0.98rem;
 }
 
 .dato-curioso strong {
-    color: #b8f0d5;
+    color: #d9f5e7;
+}
+
+.dato-curioso a {
+    color: #d9f5e7;
+}
+
+.dato-curioso a:hover {
+    text-decoration: underline;
 }
 
 .aprende-grid {
@@ -269,11 +282,19 @@ main.articulo a {
 
 .resumen li,
 .resumen p {
-    color: rgba(255, 255, 255, 0.95);
+    color: rgba(255, 255, 255, 0.97);
 }
 
 .resumen strong {
-    color: #b8f0d5;
+    color: #d9f5e7;
+}
+
+.resumen a {
+    color: #d9f5e7;
+}
+
+.resumen a:hover {
+    text-decoration: underline;
 }
 
 /* ---- Tarjetas clicables (Aprende) ---- */
