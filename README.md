@@ -20,7 +20,7 @@ Todo gratis, sin registro y sin necesidad de saber nada de finanzas para empezar
 | 🧪 **Experimentos** | La máquina del tiempo de la bolsa (con datos reales del S&P 500), el experimento de los gemelos y el reto de las 52 semanas. |
 | 🎬 **Vídeos explicativos** | Explicadores animados de ~1 minuto con narración en español, generados en el propio navegador (Web Speech API). Disponibles en los artículos principales. |
 | 🤖 **Asistente de inversión** | Pregunta lo que quieras sobre finanzas, inversión y bolsa y recibe respuestas educativas (con IA Gemini). *No es un asesor financiero.* |
-| 📈 **Mercados en tiempo real** | Gráfica interactiva de TradingView (sin claves) con 7 activos seleccionables: S&P 500, IBEX 35, Nasdaq 100, DAX, Euro Stoxx 50, Bitcoin y Oro. |
+| 📈 **Mercados en tiempo real** | Gráfica propia (SVG) con 7 activos seleccionables: S&P 500, IBEX 35, Nasdaq 100, DAX, Euro Stoxx 50, Bitcoin y Oro. Los datos se descargan solos cada 2 horas (yfinance + GitHub Actions). |
 | 🎯 **Test y perfil** | ¿Cuánto sabes de finanzas? y ¿qué perfil de inversor eres? Con resultados compartibles. |
 | 📖 **Glosario** | Más de 30 términos financieros explicados sin tecnicismos, con buscador. |
 | 📬 **Newsletter** | Contenido mensual sencillo sobre inversión y finanzas, sin spam (EmailOctopus). |
@@ -47,9 +47,13 @@ Todo gratis, sin registro y sin necesidad de saber nada de finanzas para empezar
 ├── style.css                  # Estilos de toda la web
 ├── compartir.js               # Botones de compartir y copiar citas
 ├── videos.js                  # Motor de vídeos animados con narración
+├── mercados.js                # Gráfica de mercados (lee datos/mercados.json)
+├── datos_mercado.py           # Scraper que descarga los datos (yfinance)
+├── datos/mercados.json        # Datos de mercado generados automáticamente
 ├── favicon.svg / og-image.png # Marca e imagen social
 ├── sitemap.xml / robots.txt   # SEO
-└── .github/workflows/pages.yml# Despliegue automático
+├── .github/workflows/pages.yml# Despliegue automático
+└── .github/workflows/datos.yml# Actualiza los datos cada 2 horas
 ```
 
 ## 🚀 Trabajar en local y publicar
@@ -64,8 +68,9 @@ git push
 
 > Nota: el asistente de IA necesita la variable `GEMINI_API_KEY` configurada como secreto
 > en el repositorio (Settings → Secrets and variables → Actions). Sin ella, la web funciona
-> igual, pero el asistente no responde. Las gráficas de mercados no necesitan ninguna clave
-> (widgets públicos de TradingView).
+> igual, pero el asistente no responde. La gráfica de mercados no necesita ninguna clave:
+> un workflow programado descarga los datos con yfinance cada 2 horas y los guarda en
+> `datos/mercados.json` (se conserva el dato anterior si una descarga falla).
 
 ## ⚠️ Aviso
 
