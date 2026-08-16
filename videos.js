@@ -39,11 +39,12 @@
     function prioridadVoz(v) {
         const n = v.name.toLowerCase();
         let p = 0;
+        if (/paulina/.test(n)) p += 7; // preferida por los usuarios (suena natural en macOS)
         if (/^es-es/.test(v.lang)) p += 2;
         if (/online|natural|neural/.test(n)) p += 4; // voces neurales online (Edge/Google)
         if (/google/.test(n)) p += 3;
         if (/premium|enhanced/.test(n)) p += 2;
-        if (/siri|monica|paulina|sara|diego/.test(n)) p += 1;
+        if (/siri|monica|sara|diego/.test(n)) p += 1;
         if (/^microsoft/.test(n) && !/online/.test(n)) p -= 1; // Microsoft offline genéricas
         return p;
     }
@@ -71,7 +72,15 @@
         const voz = elegirVoz();
         u.lang = voz ? voz.lang : "es-ES";
         if (voz) u.voice = voz;
-        u.rate = 1.0;
+        const nombreVoz = voz ? voz.name.toLowerCase() : "";
+        if (/paulina/.test(nombreVoz)) {
+            // Paulina menos robótica: más pausada y con el tono un punto más cálido.
+            u.rate = 0.92;
+            u.pitch = 0.9;
+        } else {
+            u.rate = 0.96;
+            u.pitch = 1.0;
+        }
         let terminado = false;
         const fin = function () {
             if (terminado) return;
