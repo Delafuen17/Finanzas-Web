@@ -660,6 +660,200 @@ main.calculadora .relacionados {
     margin-left: 0.2rem;
 }
 
+/* ---- Panel de mercados (portada) ---- */
+
+.mercado-panel {
+    background: var(--blanco);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    padding: 1.4rem;
+    margin-top: 1rem;
+}
+
+.mercado-buscador {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+}
+
+.mercado-input {
+    flex: 1;
+    font: inherit;
+    font-size: 1rem;
+    padding: 0.6rem 0.9rem;
+    border: 2px solid #d9e7e0;
+    border-radius: 10px;
+    background: #fbfdfc;
+    color: var(--texto);
+}
+
+.mercado-input:focus {
+    outline: none;
+    border-color: var(--verde-claro);
+}
+
+.mercado-boton {
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    padding: 0 1.1rem;
+    background: var(--verde);
+    color: #fff;
+    white-space: nowrap;
+}
+
+.mercado-boton:hover {
+    background: var(--verde-oscuro);
+}
+
+.mercado-resultados {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 0.8rem;
+}
+
+.mercado-resultado {
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    border: 1px solid #d9e7e0;
+    border-radius: 10px;
+    background: #fbfdfc;
+    padding: 0.55rem 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+}
+
+.mercado-resultado:hover {
+    border-color: var(--verde-claro);
+    background: #eef6f1;
+}
+
+.mercado-resultado-nombre {
+    font-weight: 600;
+    color: var(--verde-oscuro);
+}
+
+.mercado-resultado-meta {
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+}
+
+.mercado-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.9rem;
+}
+
+.mercado-chip {
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--verde-claro);
+    border-radius: 999px;
+    background: #eef6f1;
+    color: var(--verde);
+    padding: 0.3rem 0.85rem;
+}
+
+.mercado-chip:hover {
+    background: var(--verde);
+    color: #fff;
+}
+
+.mercado-ficha {
+    border: 1px solid #e3ece7;
+    border-radius: var(--radio);
+    padding: 1rem;
+    background: linear-gradient(180deg, #fbfdfc, #f6faf8);
+}
+
+.mercado-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.mercado-nombre {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--verde-oscuro);
+}
+
+.mercado-meta {
+    font-size: 0.82rem;
+    color: var(--texto-suave);
+}
+
+.mercado-datos {
+    text-align: right;
+}
+
+.mercado-precio {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: var(--verde-oscuro);
+    line-height: 1.1;
+}
+
+.mercado-precio.sube,
+.mercado-cambio.sube {
+    color: #27a06b;
+}
+
+.mercado-precio.baja,
+.mercado-cambio.baja {
+    color: #d64545;
+}
+
+.mercado-cambio {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--texto-suave);
+}
+
+.mercado-grafico {
+    margin-bottom: 0.6rem;
+}
+
+.mercado-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.mercado-cargando,
+.mercado-error {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--texto-suave);
+    font-size: 0.95rem;
+}
+
+.mercado-error {
+    color: #d64545;
+}
+
+.mercado-pie {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--texto-suave);
+}
+
 /* ---- Tarjetas clicables (Aprende) ---- */
 
 .tarjeta-tema {

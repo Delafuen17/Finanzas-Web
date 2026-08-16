@@ -27,6 +27,9 @@ jobs:
       - name: Inyectar clave de la IA
         run: sed -i "s/CLAVE_GEMINI/${{ secrets.GEMINI_API_KEY }}/g" asistente.html
 
+      - name: Inyectar clave de datos de mercado
+        run: sed -i "s/CLAVE_TWELVEDATA/${{ secrets.TWELVEDATA_API_KEY }}/g" mercado.js
+
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
 
