@@ -124,11 +124,24 @@
         });
     });
 
-    fetch("datos/mercados.json")
-        .then(function (r) {
-            if (!r.ok) throw new Error("HTTP " + r.status + " al pedir datos/mercados.json");
-            return r.json();
-        })
+    function cargarDatos() {
+        return fetch("datos/mercados.json")
+            .then(function (r) {
+                if (!r.ok) throw new Error("HTTP " + r.status);
+                return r.json();
+            })
+            .catch(function () {
+                // Si la ruta relativa falla (p. ej. la página se abrió por
+                // otra vía), se reintenta con la URL absoluta de la web.
+                return fetch("https://delafuen17.github.io/Finanzas-Web/datos/mercados.json")
+                    .then(function (r) {
+                        if (!r.ok) throw new Error("HTTP " + r.status);
+                        return r.json();
+                    });
+            });
+    }
+
+    cargarDatos()
         .then(function (json) {
             estado.datos = json;
             var fecha = new Date(json.actualizado);
@@ -143,6 +156,9 @@
             pintar(estado.clave);
         })
         .catch(function (e) {
-            grafico.innerHTML = '<div class="mercados-error">No se han podido cargar los datos de mercado: ' + escapar(e && e.message ? e.message : String(e)) + "</div>";
+            grafico.innerHTML = '<div class="mercados-error">No se han podido cargar los datos de mercado (' +
+                escapar(e && e.message ? e.message : String(e)) +
+                "). Si el problema persiste, recarga la página con Cmd+Shift+R (Mac) o Ctrl+F5 (Windows) " +
+                "o abre directamente <a href=\"https://delafuen17.github.io/Finanzas-Web/\">delafuen17.github.io/Finanzas-Web</a>.</div>";
         });
 })();
