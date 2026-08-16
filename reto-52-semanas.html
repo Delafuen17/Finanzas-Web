@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reto de las 52 semanas — Proyecto Finanzas</title>
+    <meta name="description" content="Reto de ahorro de las 52 semanas: ahorra 1 € la primera semana, 2 € la segunda... y acaba el año con casi 1.400 €. Con seguimiento de progreso.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+
+<body>
+
+    <header>
+        <h1>Reto de las 52 semanas</h1>
+        <p>Ahorra 1 € la semana 1, 2 € la semana 2... y al terminar el año tendrás <strong>1.378 €</strong>. Haz clic en cada semana al completarla: tu progreso se guarda en este navegador.</p>
+    </header>
+
+    <main class="aprende">
+
+        <section class="reto-resumen">
+            <div class="reto-total">
+                <span class="etiqueta">Meta del año</span>
+                <span class="cantidad">1.378 €</span>
+            </div>
+            <div class="reto-progreso">
+                <div class="reto-barra"><div id="reto-barra"></div></div>
+                <p id="reto-texto">0 de 52 semanas · 0 € ahorrados</p>
+            </div>
+        </section>
+
+        <div class="reto-grid" id="reto-grid"></div>
+
+        <div class="reto-botones">
+            <button type="button" class="anadir" id="reto-marcar-semanas">✓ Marcar las semanas ya pasadas de este año</button>
+            <button type="button" class="quitar-reto" id="reto-reiniciar">Reiniciar el reto</button>
+        </div>
+
+        <p class="nota">Las cantidades se guardan solo en tu navegador (localStorage): puedes cerrar la pestaña y seguir otro día. El reto funciona en cualquier momento del año: si ya has pasado de la semana 13, empieza desde ahí.</p>
+
+    </main>
+
+    <div class="reto-celebracion" id="reto-celebracion" hidden>
+        <div class="reto-celebracion-caja">
+            <h2>🎉 ¡Reto completado!</h2>
+            <p>Has ahorrado <strong>1.378 €</strong> en un año, sin darte cuenta. Imagina qué pasa si lo haces con el interés compuesto de por medio.</p>
+            <button type="button" class="boton" onclick="document.getElementById('reto-celebracion').hidden = true;">Seguir</button>
+        </div>
+    </div>
+
+    <footer>
+        <p><a href="herramientas.html">← Volver a Herramientas</a> · <a href="privacidad.html">Privacidad</a> — Educación financiera</p>
+    </footer>
+
+    <script>
+        const TOTAL = 52 * 53 / 2; // 1.378 €
+        const CLAVE = "reto52semanas";
+
+        function leerProgreso() {
+            try {
+                const guardado = JSON.parse(localStorage.getItem(CLAVE));
+                return Array.isArray(guardado) ? new Set(guardado) : new Set();
+            } catch {
+                return new Set();
+            }
+        }
+
+        function guardarProgreso(completadas) {
+            localStorage.setItem(CLAVE, JSON.stringify([...completadas]));
+        }
+
+        function pintar() {
+            const completadas = leerProgreso();
+            const grid = document.getElementById("reto-grid");
+            grid.innerHTML = "";
+
+            for (let s = 1; s <= 52; s++) {
+                const boton = document.createElement("button");
+                boton.type = "button";
+                boton.className = "reto-celda" + (completadas.has(s) ? " hecha" : "");
+                boton.innerHTML = `<strong>${s}</strong><span>${s} €</span>`;
+                boton.setAttribute("aria-pressed", completadas.has(s));
+                boton.addEventListener("click", () => {
+                    const actual = leerProgreso();
+                    if (actual.has(s)) actual.delete(s);
+                    else actual.add(s);
+                    guardarProgreso(actual);
+                    pintar();
+                    if (actual.size === 52) celebrar();
+                });
+                grid.appendChild(boton);
+            }
+
+            const ahorrado = [...completadas].reduce((a, s) => a + s, 0);
+            const porcentaje = Math.round((completadas.size / 52) * 100);
+            document.getElementById("reto-barra").style.width = porcentaje + "%";
+            document.getElementById("reto-texto").textContent =
+                `${completadas.size} de 52 semanas · ${new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(ahorrado)} ahorrados`;
+        }
+
+        // Marca las semanas ya pasadas del año actual (1 = primera semana de enero).
+        function marcarSemanasPasadas() {
+            const ahora = new Date();
+            const inicioAño = new Date(ahora.getFullYear(), 0, 1);
+            const semana = Math.min(52, Math.ceil(((ahora - inicioAño) / 86400000 + inicioAño.getDay() + 1) / 7));
+            const completadas = leerProgreso();
+            for (let s = 1; s <= semana; s++) completadas.add(s);
+            guardarProgreso(completadas);
+            pintar();
+        }
+
+        function celebrar() {
+            const overlay = document.getElementById("reto-celebracion");
+            overlay.hidden = false;
+            lanzarConfeti();
+        }
+
+        // Confeti ligero en CSS/JS puro.
+        function lanzarConfeti() {
+            const colores = ["#27a06b", "#1b6b4a", "#b8f0d5", "#f0c94d", "#4db8e8"];
+            for (let i = 0; i < 90; i++) {
+                const pieza = document.createElement("div");
+                pieza.className = "confeti";
+                pieza.style.left = Math.random() * 100 + "vw";
+                pieza.style.background = colores[Math.floor(Math.random() * colores.length)];
+                pieza.style.animationDelay = (Math.random() * 0.8) + "s";
+                pieza.style.animationDuration = (2.5 + Math.random() * 2) + "s";
+                document.body.appendChild(pieza);
+                setTimeout(() => pieza.remove(), 6000);
+            }
+        }
+
+        document.getElementById("reto-marcar-semanas").addEventListener("click", marcarSemanasPasadas);
+        document.getElementById("reto-reiniciar").addEventListener("click", () => {
+            if (confirm("¿Seguro que quieres reiniciar el reto? Perderás todo el progreso guardado.")) {
+                localStorage.removeItem(CLAVE);
+                pintar();
+            }
+        });
+
+        pintar();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El experimento de los gemelos — Proyecto Finanzas</title>
+    <meta name="description" content="El experimento de los gemelos: compara dos personas idénticas que empiezan a invertir a distintas edades y descubre cuánto vale empezar pronto con el interés compuesto.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+
+<body>
+
+    <header>
+        <h1>El experimento de los gemelos</h1>
+        <p>Dos personas idénticas, mismas aportaciones, misma rentabilidad. Solo cambia la edad de inicio. ¿Cuánto vale empezar 10 años antes?</p>
+    </header>
+
+    <main class="aprende">
+
+        <section class="formulario gemelos-form">
+            <h2>Configura el experimento</h2>
+
+            <label for="edad-a">Edad de inicio del Gemelo A</label>
+            <input type="number" id="edad-a" min="16" max="60" step="1" value="25" inputmode="numeric">
+
+            <label for="edad-b">Edad de inicio del Gemelo B</label>
+            <input type="number" id="edad-b" min="16" max="60" step="1" value="35" inputmode="numeric">
+
+            <label for="aportacion">Aportación mensual de ambos (€)</label>
+            <input type="number" id="aportacion" min="0" step="any" value="100" inputmode="decimal">
+
+            <label for="rentabilidad">Rentabilidad anual (%)</label>
+            <input type="number" id="rentabilidad" min="0" step="any" value="7" inputmode="decimal">
+
+            <label for="jubilacion">Edad de jubilación</label>
+            <input type="number" id="jubilacion" min="40" max="80" step="1" value="65" inputmode="numeric">
+
+            <button id="calcular" onclick="calcular()">Calcular</button>
+        </section>
+
+        <div class="gemelos-resultado" id="resultado">
+
+            <div class="gemelo gemelo-a">
+                <h3>Gemelo A · empieza a los <span id="a-edad">25</span></h3>
+                <div class="cantidad" id="a-final">—</div>
+                <span class="etiqueta">al jubilarse a los <span id="a-jubilacion">65</span></span>
+                <div class="desglose">
+                    <div>
+                        <span class="etiqueta">Aportado</span>
+                        <span class="cantidad" id="a-aportado">—</span>
+                    </div>
+                    <div>
+                        <span class="etiqueta">Intereses</span>
+                        <span class="cantidad" id="a-intereses">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gemelo gemelo-b">
+                <h3>Gemelo B · empieza a los <span id="b-edad">35</span></h3>
+                <div class="cantidad" id="b-final">—</div>
+                <span class="etiqueta">al jubilarse a los <span id="b-jubilacion">65</span></span>
+                <div class="desglose">
+                    <div>
+                        <span class="etiqueta">Aportado</span>
+                        <span class="cantidad" id="b-aportado">—</span>
+                    </div>
+                    <div>
+                        <span class="etiqueta">Intereses</span>
+                        <span class="cantidad" id="b-intereses">—</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="gemelos-mensaje" id="mensaje"></div>
+
+        <div class="barras">
+            <div class="barra-fila">
+                <span class="barra-etiqueta">Gemelo A</span>
+                <div class="barra-contenedor"><div class="barra" id="barra-a"></div></div>
+            </div>
+            <div class="barra-fila">
+                <span class="barra-etiqueta">Gemelo B</span>
+                <div class="barra-contenedor"><div class="barra barra-intereses" id="barra-b"></div></div>
+            </div>
+        </div>
+
+        <p class="nota">Estimación orientativa con interés compuesto mensual, sin impuestos ni comisiones. El experimento solo cambia la edad de inicio: todo lo demás es idéntico para ambos.</p>
+
+    </main>
+
+    <footer>
+        <p><a href="herramientas.html">← Volver a Herramientas</a> · <a href="privacidad.html">Privacidad</a> — Educación financiera</p>
+    </footer>
+
+    <script>
+        function formato(valor) {
+            return new Intl.NumberFormat("es-ES", {
+                style: "currency",
+                currency: "EUR",
+                maximumFractionDigits: 0
+            }).format(Math.round(valor));
+        }
+
+        // Valor final invirtiendo `mensual` €/mes desde `inicio` hasta `jubilacion` años.
+        function valorFinal(inicio, jubilacion, mensual, rentabilidad) {
+            if (jubilacion <= inicio) return 0;
+            const tasaMensual = rentabilidad / 100 / 12;
+            let valor = 0;
+            for (let m = 0; m < (jubilacion - inicio) * 12; m++) {
+                valor = valor * (1 + tasaMensual) + mensual;
+            }
+            return valor;
+        }
+
+        function calcular() {
+            const edadA = parseInt(document.getElementById("edad-a").value) || 25;
+            const edadB = parseInt(document.getElementById("edad-b").value) || 35;
+            const mensual = parseFloat(document.getElementById("aportacion").value) || 0;
+            const rentabilidad = parseFloat(document.getElementById("rentabilidad").value) || 0;
+            const jubilacion = parseInt(document.getElementById("jubilacion").value) || 65;
+
+            document.getElementById("a-edad").textContent = edadA;
+            document.getElementById("b-edad").textContent = edadB;
+            document.getElementById("a-jubilacion").textContent = jubilacion;
+            document.getElementById("b-jubilacion").textContent = jubilacion;
+
+            const finalA = valorFinal(edadA, jubilacion, mensual, rentabilidad);
+            const finalB = valorFinal(edadB, jubilacion, mensual, rentabilidad);
+
+            const mesesA = Math.max(0, jubilacion - edadA) * 12;
+            const mesesB = Math.max(0, jubilacion - edadB) * 12;
+            const aportadoA = mensual * mesesA;
+            const aportadoB = mensual * mesesB;
+
+            document.getElementById("a-final").textContent = formato(finalA);
+            document.getElementById("b-final").textContent = formato(finalB);
+            document.getElementById("a-aportado").textContent = formato(aportadoA);
+            document.getElementById("b-aportado").textContent = formato(aportadoB);
+            document.getElementById("a-intereses").textContent = formato(Math.max(0, finalA - aportadoA));
+            document.getElementById("b-intereses").textContent = formato(Math.max(0, finalB - aportadoB));
+
+            const max = Math.max(finalA, finalB, 1);
+            document.getElementById("barra-a").style.width = (finalA / max) * 100 + "%";
+            document.getElementById("barra-b").style.width = (finalB / max) * 100 + "%";
+
+            const mensaje = document.getElementById("mensaje");
+            if (jubilacion <= edadA || jubilacion <= edadB) {
+                mensaje.innerHTML = "⚠️ La edad de jubilación debe ser mayor que las edades de inicio.";
+                mensaje.classList.add("gemelos-alerta");
+                return;
+            }
+
+            mensaje.classList.remove("gemelos-alerta");
+
+            if (edadA === edadB) {
+                mensaje.innerHTML = "Los dos gemelos empiezan a la misma edad: el resultado es idéntico. Prueba a darle <strong>10 años de ventaja</strong> a uno.";
+            } else {
+                const rapido = edadA < edadB ? "A" : "B";
+                const lento = edadA < edadB ? "B" : "A";
+                const inicioRapido = Math.min(edadA, edadB);
+                const inicioLento = Math.max(edadA, edadB);
+                const finalRapido = Math.max(finalA, finalB);
+                const finalLento = Math.min(finalA, finalB);
+                const diferencia = finalRapido - finalLento;
+                const veces = finalLento > 0 ? (finalRapido / finalLento) : 0;
+
+                let fraseVeces = "";
+                if (veces >= 1.9) {
+                    fraseVeces = `Casi el <strong>doble</strong> (${veces.toFixed(1)}×) con exactamente el mismo dinero aportado.`;
+                } else if (veces > 1.1) {
+                    fraseVeces = `Un ${((veces - 1) * 100).toFixed(0)} % más con exactamente el mismo dinero aportado.`;
+                } else {
+                    fraseVeces = "En este caso la diferencia es pequeña: el interés compuesto necesita años para hacer su magia.";
+                }
+
+                mensaje.innerHTML =
+                    `El <strong>Gemelo ${rapido}</strong> (empieza a los ${inicioRapido}) acaba con <strong>${formato(diferencia)} más</strong> ` +
+                    `que el Gemelo ${lento} (empieza a los ${inicioLento}). ${fraseVeces} ` +
+                    `Los ${inicioLento - inicioRapido} años de ventaja no solo suman ${formato((inicioLento - inicioRapido) * 12 * mensual)} de aportaciones extra: ` +
+                    `también dan a los intereses décadas extra para trabajar sobre los intereses.`;
+            }
+        }
+
+        calcular();
+    </script>
+
+</body>
+</html>

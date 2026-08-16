@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La máquina del tiempo de la bolsa — Proyecto Finanzas</title>
+    <meta name="description" content="La máquina del tiempo de la bolsa: invierte con datos reales del S&P 500 desde 1970 y descubre cuánto tendrías hoy si hubieras empezado a aportar cada mes.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+
+<body>
+
+    <header>
+        <h1>La máquina del tiempo de la bolsa</h1>
+        <p>Elige un año, aporta cada mes y descubre qué habría pasado con tu dinero usando los datos reales del S&P 500 desde 1970.</p>
+    </header>
+
+    <main class="calculadora">
+
+        <section class="formulario">
+            <h2>Configura el viaje</h2>
+
+            <label for="inicio">Año de inicio</label>
+            <select id="inicio"></select>
+
+            <label for="mensual">Aportación mensual (€)</label>
+            <input type="number" id="mensual" min="0" step="any" value="100" inputmode="decimal">
+
+            <button id="calcular" onclick="calcular()">Viajar en el tiempo</button>
+        </section>
+
+        <section class="resultados" id="resultados">
+            <h2>Resultado</h2>
+
+            <div class="resultado-grande">
+                <span class="etiqueta">Hoy tendrías</span>
+                <span class="cantidad" id="resultado-final">—</span>
+            </div>
+
+            <div class="desglose">
+                <div>
+                    <span class="etiqueta">Aportado por ti</span>
+                    <span class="cantidad" id="resultado-aportado">—</span>
+                </div>
+                <div>
+                    <span class="etiqueta">Lo puso el mercado</span>
+                    <span class="cantidad" id="resultado-intereses">—</span>
+                </div>
+            </div>
+
+            <div class="grafico-tiempo">
+                <svg id="grafico" viewBox="0 0 700 240" role="img" aria-label="Evolución del patrimonio año a año"></svg>
+            </div>
+
+            <p class="nota" id="comparacion"></p>
+
+            <p class="nota">Simulación con los cierres anuales reales del S&amp;P 500 (1970-2024), sin dividendos reinvertidos, sin impuestos ni comisiones. El pasado no garantiza el futuro: esto es una máquina del tiempo, no una bola de cristal.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p><a href="herramientas.html">← Volver a Herramientas</a> · <a href="privacidad.html">Privacidad</a> — Educación financiera</p>
+    </footer>
+
+    <script>
+        // Cierres anuales reales del S&P 500 (diciembre de cada año).
+        const SP500 = {
+            1970: 92.15, 1971: 102.09, 1972: 118.05, 1973: 97.55, 1974: 68.56,
+            1975: 90.19, 1976: 107.46, 1977: 95.10, 1978: 96.11, 1979: 107.94,
+            1980: 135.76, 1981: 122.55, 1982: 140.64, 1983: 164.93, 1984: 167.24,
+            1985: 211.28, 1986: 242.17, 1987: 247.08, 1988: 277.72, 1989: 353.40,
+            1990: 330.22, 1991: 417.09, 1992: 435.71, 1993: 466.45, 1994: 459.27,
+            1995: 615.93, 1996: 740.74, 1997: 970.43, 1998: 1229.23, 1999: 1469.25,
+            2000: 1320.28, 2001: 1148.08, 2002: 879.82, 2003: 1111.92, 2004: 1211.92,
+            2005: 1248.29, 2006: 1418.30, 2007: 1468.36, 2008: 903.25, 2009: 1115.10,
+            2010: 1257.64, 2011: 1257.60, 2012: 1426.19, 2013: 1848.36, 2014: 2058.90,
+            2015: 2043.94, 2016: 2238.83, 2017: 2673.61, 2018: 2506.85, 2019: 3230.78,
+            2020: 3756.07, 2021: 4766.18, 2022: 3839.50, 2023: 4769.83, 2024: 5881.63
+        };
+        const ULTIMO_AÑO = 2024;
+        const PRIMER_AÑO = 1971; // El primer año necesita el cierre del año anterior.
+
+        function formato(valor) {
+            return new Intl.NumberFormat("es-ES", {
+                style: "currency",
+                currency: "EUR",
+                maximumFractionDigits: 0
+            }).format(Math.round(valor));
+        }
+
+        function simular(inicio, mensual) {
+            let riqueza = 0;
+            const serie = [];
+            for (let y = inicio; y <= ULTIMO_AÑO; y++) {
+                const rendimiento = SP500[y] / SP500[y - 1] - 1;
+                riqueza = (riqueza + mensual * 12) * (1 + rendimiento);
+                serie.push({ año: y, valor: riqueza });
+            }
+            return serie;
+        }
+
+        function dibujarGrafico(serie) {
+            const svg = document.getElementById("grafico");
+            const W = 700, H = 240, MARGEN = 34;
+            const max = Math.max(...serie.map(p => p.valor), 1);
+            const min = 0;
+            const n = serie.length;
+
+            const x = i => MARGEN + (i / (n - 1)) * (W - 2 * MARGEN);
+            const y = v => H - MARGEN - (v / max) * (H - 2 * MARGEN);
+
+            let puntos = "";
+            let area = `M ${x(0)} ${y(serie[0].valor)}`;
+            serie.forEach((p, i) => {
+                puntos += `${x(i).toFixed(1)},${y(p.valor).toFixed(1)} `;
+                area += ` L ${x(i).toFixed(1)} ${y(p.valor).toFixed(1)}`;
+            });
+            area += ` L ${x(n - 1).toFixed(1)} ${H - MARGEN} L ${x(0).toFixed(1)} ${H - MARGEN} Z`;
+
+            const ultimo = serie[serie.length - 1];
+            svg.innerHTML = `
+                <line x1="${MARGEN}" y1="${H - MARGEN}" x2="${W - MARGEN}" y2="${H - MARGEN}" stroke="#cfe0d8" stroke-width="2"/>
+                <path d="${area}" fill="rgba(39, 160, 107, 0.18)"/>
+                <polyline points="${puntos}" fill="none" stroke="#1b6b4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="${x(n - 1)}" cy="${y(ultimo.valor)}" r="6" fill="#27a06b"/>
+                <text x="${MARGEN}" y="${H - MARGEN + 22}" font-family="sans-serif" font-size="13" fill="#5c6f66">${serie[0].año}</text>
+                <text x="${W - MARGEN}" y="${H - MARGEN + 22}" text-anchor="end" font-family="sans-serif" font-size="13" fill="#5c6f66">${ultimo.año}</text>
+                <text x="${x(n - 1)}" y="${y(ultimo.valor) - 14}" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#0f3d2e">${formato(ultimo.valor)}</text>
+            `;
+        }
+
+        function calcular() {
+            const inicio = parseInt(document.getElementById("inicio").value);
+            const mensual = parseFloat(document.getElementById("mensual").value) || 0;
+
+            const serie = simular(inicio, mensual);
+            const final = serie[serie.length - 1].valor;
+            const aportado = mensual * 12 * serie.length;
+            const intereses = Math.max(0, final - aportado);
+
+            document.getElementById("resultado-final").textContent = formato(final);
+            document.getElementById("resultado-aportado").textContent = formato(aportado);
+            document.getElementById("resultado-intereses").textContent = formato(intereses);
+
+            dibujarGrafico(serie);
+
+            // Comparación: ¿y si hubieras empezado 10 años antes?
+            const comparacion = document.getElementById("comparacion");
+            const inicioAnterior = inicio - 10;
+            if (inicioAnterior >= PRIMER_AÑO) {
+                const serieAnterior = simular(inicioAnterior, mensual);
+                const finalAnterior = serieAnterior[serieAnterior.length - 1].valor;
+                const extra = finalAnterior - final;
+                comparacion.innerHTML = `Curiosidad: si hubieras empezado 10 años antes (en <strong>${inicioAnterior}</strong>), hoy tendrías <strong>${formato(finalAnterior)}</strong> — ${formato(extra)} más, habiendo aportado solo ${formato(mensual * 120)} adicionales.`;
+            } else {
+                comparacion.innerHTML = "Empezar en los 70 fue la opción más rentable de la historia reciente: los intereses llevan medio siglo trabajando.";
+            }
+        }
+
+        // Rellenar el selector de años
+        (function() {
+            const select = document.getElementById("inicio");
+            for (let y = ULTIMO_AÑO; y >= PRIMER_AÑO; y--) {
+                const opcion = document.createElement("option");
+                opcion.value = y;
+                opcion.textContent = y;
+                if (y === 2015) opcion.selected = true;
+                select.appendChild(opcion);
+            }
+        })();
+
+        calcular();
+    </script>
+
+</body>
+</html>
