@@ -20,6 +20,7 @@
             en educación financiera, no un asesor financiero registrado. Mis respuestas son <strong>orientativas
             y pueden contener errores</strong>. No tomes decisiones de inversión basándote solo en lo que te
             diga: infórmate y, si lo necesitas, consulta a un profesional.
+            Consulta la <a href="privacidad.html">política de privacidad</a> para saber cómo se tratan tus preguntas.
         </div>
 
         <section class="chat">
@@ -50,15 +51,16 @@
     </main>
 
     <footer>
-        <p><a href="index.html">← Volver a Proyecto Finanzas</a> — Educación financiera</p>
+        <p><a href="index.html">← Volver a Proyecto Finanzas</a> · <a href="privacidad.html">Privacidad</a> — Educación financiera</p>
     </footer>
 
     <script>
+        // CLAVE_GEMINI es sustituida por la clave real durante el despliegue (GitHub Actions).
         const API_KEY = "CLAVE_GEMINI";
         const MODELO = "gemini-3.5-flash";
         const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/interactions?key=" + API_KEY;
 
-        let interaccionId = null;
+        let historial = [];
         let ocupado = false;
 
         const INSTRUCCIONES = [
@@ -79,8 +81,9 @@
             const p = document.createElement("p");
             p.textContent = texto;
             div.appendChild(p);
-            document.getElementById("mensajes").appendChild(div);
-            document.getElementById("mensajes").scrollTop = document.getElementById("mensajes").scrollHeight;
+            const contenedor = document.getElementById("mensajes");
+            contenedor.appendChild(div);
+            contenedor.scrollTop = contenedor.scrollHeight;
             return div;
         }
 
@@ -89,8 +92,9 @@
             div.className = "mensaje ia escribiendo";
             div.innerHTML = "<span class='punto'></span><span class='punto'></span><span class='punto'></span>";
             div.id = "escribiendo";
-            document.getElementById("mensajes").appendChild(div);
-            document.getElementById("mensajes").scrollTop = document.getElementById("mensajes").scrollHeight;
+            const contenedor = document.getElementById("mensajes");
+            contenedor.appendChild(div);
+            contenedor.scrollTop = contenedor.scrollHeight;
         }
 
         function quitarEscribiendo() {
@@ -106,20 +110,20 @@
             ocupado = true;
             entrada.value = "";
             agregarMensaje(pregunta, true);
+            historial.push(pregunta);
+
+            // Modo sin estado: se envía el historial completo en cada petición,
+            // Google no almacena las conversaciones (store: false).
+            const partes = [{ type: "text", text: INSTRUCCIONES }];
+            historial.slice(-10).forEach(t => partes.push({ type: "text", text: t }));
+
             mostrarEscribiendo();
 
             try {
-                const input = interaccionId
-                    ? pregunta
-                    : INSTRUCCIONES + "\n\nPregunta del usuario:\n" + pregunta;
-
-                const body = { model: MODELO, input: input };
-                if (interaccionId) body.previous_interaction_id = interaccionId;
-
                 const res = await fetch(ENDPOINT, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(body)
+                    body: JSON.stringify({ model: MODELO, input: partes, store: false })
                 });
 
                 const data = await res.json();
@@ -131,8 +135,6 @@
                     throw new Error("Lo siento, ha habido un error al contactar conmigo. Inténtalo de nuevo en un momento.");
                 }
 
-                interaccionId = data.id || interaccionId;
-
                 const salida = (data.steps || [])
                     .filter(s => s.type === "model_output")
                     .map(s => (s.content || []).map(c => c.text || "").join(""))
@@ -141,11 +143,13 @@
                 quitarEscribiendo();
                 if (salida) {
                     agregarMensaje(salida, false);
+                    historial.push(salida);
                 } else {
                     agregarMensaje("No he podido generar una respuesta. Prueba con otra pregunta.", false);
                 }
             } catch (err) {
                 quitarEscribiendo();
+                historial.pop();
                 agregarMensaje(err.message || "Error inesperado. Inténtalo de nuevo.", false);
             } finally {
                 ocupado = false;
@@ -159,7 +163,7 @@
         }
 
         function nuevaConversacion() {
-            interaccionId = null;
+            historial = [];
             const contenedor = document.getElementById("mensajes");
             contenedor.innerHTML = "";
             agregarMensaje("Nueva conversación iniciada. ¿Sobre qué quieres preguntar? (Recuerda: soy una IA y mi consejo no sustituye a un profesional)", false);
