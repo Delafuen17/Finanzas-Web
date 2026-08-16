@@ -464,6 +464,27 @@ main.calculadora .relacionados {
     outline-offset: 2px;
 }
 
+.video-ia-voz {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+}
+
+.video-ia-select {
+    font: inherit;
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--verde-claro);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--texto);
+    max-width: 100%;
+}
+
 /* Escenario: elementos de los vídeos */
 
 .vic-cifra {

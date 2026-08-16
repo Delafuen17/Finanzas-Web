@@ -19,6 +19,8 @@
     /* ---------- Voz en español ---------- */
 
     let voces = [];
+    let vozElegida = ""; // nombre de la voz elegida por el usuario ("" = automática)
+    const refrescadores = []; // funciones que rellenan selectores de voz al cargar las voces
 
     function actualizarVoces() {
         if ("speechSynthesis" in window) {
@@ -27,7 +29,37 @@
     }
     if ("speechSynthesis" in window) {
         actualizarVoces();
-        window.speechSynthesis.onvoiceschanged = actualizarVoces;
+        window.speechSynthesis.onvoiceschanged = function () {
+            actualizarVoces();
+            refrescadores.forEach(function (f) { f(); });
+        };
+    }
+
+    // Ordena las voces en español por calidad estimada.
+    function prioridadVoz(v) {
+        const n = v.name.toLowerCase();
+        let p = 0;
+        if (/^es-es/.test(v.lang)) p += 2;
+        if (/google/.test(n)) p += 3;
+        if (/neural/.test(n)) p += 3;
+        if (/premium|enhanced|natural/.test(n)) p += 2;
+        if (/siri|monica|paulina|sara|diego/.test(n)) p += 1;
+        if (/helena|hauwa|sabina|jorge|libby|desktop|mobile|female|male/.test(n)) p -= 1;
+        return p;
+    }
+
+    function mejorVozEspanol() {
+        const es = voces.filter(function (v) { return /^es/i.test(v.lang); });
+        if (!es.length) return null;
+        es.sort(function (a, b) { return prioridadVoz(b) - prioridadVoz(a); });
+        return es[0];
+    }
+
+    function elegirVoz() {
+        if (vozElegida) {
+            return voces.find(function (v) { return v.name === vozElegida; }) || null;
+        }
+        return mejorVozEspanol();
     }
 
     function hablar(texto, alTerminar) {
@@ -36,8 +68,8 @@
             return;
         }
         const u = new SpeechSynthesisUtterance(texto);
-        u.lang = "es-ES";
-        const voz = voces.find(function (v) { return /^es/i.test(v.lang); });
+        const voz = elegirVoz();
+        u.lang = voz ? voz.lang : "es-ES";
         if (voz) u.voice = voz;
         u.rate = 1.0;
         let terminado = false;
@@ -211,6 +243,57 @@
                 }
             });
             botonReiniciar.addEventListener("click", reiniciar);
+
+            /* Selector de voz (solo se muestra si hay varias voces en español) */
+            const filaVoz = document.createElement("div");
+            filaVoz.className = "video-ia-voz";
+            const etiquetaVoz = document.createElement("label");
+            etiquetaVoz.textContent = "Voz:";
+            const selectVoz = document.createElement("select");
+            selectVoz.className = "video-ia-select";
+            selectVoz.setAttribute("aria-label", "Voz de la narración");
+            filaVoz.appendChild(etiquetaVoz);
+            filaVoz.appendChild(selectVoz);
+            contenedor.querySelector(".video-ia-cabecera").insertAdjacentElement("afterend", filaVoz);
+
+            function poblarVoces() {
+                const es = voces.filter(function (v) { return /^es/i.test(v.lang); });
+                if (es.length < 2) {
+                    filaVoz.hidden = true;
+                    return;
+                }
+                filaVoz.hidden = false;
+                selectVoz.innerHTML = "";
+                const auto = document.createElement("option");
+                auto.value = "";
+                auto.textContent = "Automática (recomendada)";
+                selectVoz.appendChild(auto);
+                es.slice().sort(function (a, b) {
+                    return prioridadVoz(b) - prioridadVoz(a);
+                }).forEach(function (v) {
+                    const op = document.createElement("option");
+                    op.value = v.name;
+                    op.textContent = v.name;
+                    selectVoz.appendChild(op);
+                });
+                const sigueExistiendo = Array.prototype.some.call(selectVoz.options, function (o) {
+                    return o.value === vozElegida;
+                });
+                selectVoz.value = (vozElegida && sigueExistiendo) ? vozElegida : "";
+                if (selectVoz.value !== vozElegida) vozElegida = selectVoz.value;
+            }
+
+            selectVoz.addEventListener("change", function () {
+                vozElegida = selectVoz.value;
+                if (estado.corriendo) {
+                    limpiar();
+                    reproducirEscena(estado.escena);
+                }
+            });
+
+            refrescadores.push(poblarVoces);
+            poblarVoces();
+
             actualizarBoton();
         });
     }
