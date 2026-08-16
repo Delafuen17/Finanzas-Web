@@ -418,86 +418,37 @@ main.articulo a {
 
 /* ---- Newsletter ---- */
 
-section.newsletter {
-    grid-column: 1 / -1;
-}
+/* La sección es una tarjeta más de la portada (mismo tamaño que
+   Aprende y Herramientas): sin grid-column, no ocupa todo el ancho. */
 
-/* El formulario de EmailOctopus se inyecta con su propia hoja de
-   estilos (Bootstrap incluido) que carga después de la nuestra.
-   Estructura real del formulario (decodificada del script):
-   - Título y texto en bloques [eo-block="title"/"text"]
-   - El botón es un <input type="submit"> con clases .btn .btn-primary
-   - Marca "Powered by EmailOctopus" en .mastfoot
-   Se normaliza todo con !important para que encaje con la web. */
-.eo-form-wrapper {
-    max-width: 32rem !important;
-    margin: 1.2rem auto 0 !important;
-}
-
-/* El título y la descripción propios del formulario se ocultan:
-   la sección de la portada ya tiene su propio texto. */
-.eo-form-wrapper [eo-block="title"],
-.eo-form-wrapper [eo-block="text"] {
-    display: none !important;
-}
-
-.emailoctopus-form-wrapper,
-.emailoctopus-form-wrapper.emailoctopus-form-default {
-    max-width: 32rem !important;
-    margin: 1.2rem auto 0 !important;
-    padding: 1.4rem 1.6rem !important;
-    background: #f6f8f7 !important;
-    border: 1px solid #e3e9e6 !important;
-    border-radius: 14px !important;
-    box-shadow: none !important;
-    text-align: left !important;
+/* Formulario embebido de EmailOctopus: se limita el ancho y se integra
+   con el diseño de la sección. Los colores del formulario en sí se
+   configuran desde el panel de EmailOctopus (pestaña Style). */
+.emailoctopus-form-wrapper {
+    max-width: 30rem;
+    margin: 1rem auto 0;
 }
 
 .emailoctopus-form input[type="email"] {
-    width: 100% !important;
-    height: auto !important;
-    padding: 0.75rem 0.9rem !important;
-    font-size: 1rem !important;
-    font-family: inherit !important;
-    border: 1px solid #d5ded9 !important;
-    border-radius: 10px !important;
-    background: var(--blanco) !important;
-    color: var(--texto) !important;
-    outline: none;
-    box-sizing: border-box;
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    font-size: 1rem;
+    border: 1px solid #d5ded9;
+    border-radius: 10px;
+    background: var(--fondo);
+    color: var(--texto);
 }
 
-.emailoctopus-form input[type="email"]:focus {
-    border-color: var(--verde-claro) !important;
-    box-shadow: 0 0 0 3px rgba(39, 160, 107, 0.15) !important;
-}
-
-/* El botón real es un <input type="submit"> con estilos de Bootstrap
-   (.btn-primary azul): se sustituyen por los del sitio. */
-.emailoctopus-form input[type="submit"] {
-    width: 100% !important;
-    margin-top: 0.6rem !important;
-    padding: 0.8rem 1.4rem !important;
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    font-family: inherit !important;
-    line-height: 1.4 !important;
-    color: var(--blanco) !important;
-    background: linear-gradient(135deg, var(--verde), var(--verde-claro)) !important;
-    border: none !important;
-    border-radius: 10px !important;
-    cursor: pointer !important;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.emailoctopus-form input[type="submit"]:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(27, 107, 74, 0.35);
-}
-
-/* Marca de EmailOctopus: se oculta para integrar el formulario. */
-.mastfoot {
-    display: none !important;
+.emailoctopus-form button[type="submit"],
+.emailoctopus-form-row-subscribe button {
+    padding: 0.7rem 1.4rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--blanco);
+    background: linear-gradient(135deg, var(--verde), var(--verde-claro));
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 .emailoctopus-error-message {
